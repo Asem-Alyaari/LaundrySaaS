@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>LaundrySaaS.Laundries</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Ddd.Domain" Version="10.6.0" />
+    <ProjectReference Include="..\LaundrySaaS.Laundries.Domain.Shared\LaundrySaaS.Laundries.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\src\LaundrySaaS.Domain\LaundrySaaS.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

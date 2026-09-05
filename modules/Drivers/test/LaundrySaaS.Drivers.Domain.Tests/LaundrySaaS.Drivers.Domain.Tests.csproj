@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>LaundrySaaS.Drivers</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\LaundrySaaS.Drivers.Domain\LaundrySaaS.Drivers.Domain.csproj" />
+    <ProjectReference Include="..\LaundrySaaS.Drivers.TestBase\LaundrySaaS.Drivers.TestBase.csproj" />
+  </ItemGroup>
+
+
+</Project>

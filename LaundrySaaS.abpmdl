@@ -1,0 +1,111 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "LaundrySaaS.Domain.Shared": {
+      "path": "src/LaundrySaaS.Domain.Shared/LaundrySaaS.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.Domain": {
+      "path": "src/LaundrySaaS.Domain/LaundrySaaS.Domain.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.Application.Contracts": {
+      "path": "src/LaundrySaaS.Application.Contracts/LaundrySaaS.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.Application": {
+      "path": "src/LaundrySaaS.Application/LaundrySaaS.Application.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.EntityFrameworkCore": {
+      "path": "src/LaundrySaaS.EntityFrameworkCore/LaundrySaaS.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.MongoDB": {
+      "path": "src/LaundrySaaS.MongoDB/LaundrySaaS.MongoDB.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.HttpApi": {
+      "path": "src/LaundrySaaS.HttpApi/LaundrySaaS.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.HttpApi.Client": {
+      "path": "src/LaundrySaaS.HttpApi.Client/LaundrySaaS.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.TestBase": {
+      "path": "test/LaundrySaaS.TestBase/LaundrySaaS.TestBase.abppkg",
+      "folder": "test"
+    },
+    "LaundrySaaS.EntityFrameworkCore.Tests": {
+      "path": "test/LaundrySaaS.EntityFrameworkCore.Tests/LaundrySaaS.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "LaundrySaaS.MongoDB.Tests": {
+      "path": "test/LaundrySaaS.MongoDB.Tests/LaundrySaaS.MongoDB.Tests.abppkg",
+      "folder": "test"
+    },
+    "LaundrySaaS.Domain.Tests": {
+      "path": "test/LaundrySaaS.Domain.Tests/LaundrySaaS.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "LaundrySaaS.Application.Tests": {
+      "path": "test/LaundrySaaS.Application.Tests/LaundrySaaS.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "LaundrySaaS.HttpApi.Host": {
+      "path": "host/LaundrySaaS.HttpApi.Host/LaundrySaaS.HttpApi.Host.abppkg",
+      "folder": "host"
+    },
+    "LaundrySaaS.Web": {
+      "path": "src/LaundrySaaS.Web/LaundrySaaS.Web.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/LaundrySaaS.HttpApi.Client.ConsoleTestApp/LaundrySaaS.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "LaundrySaaS.Web.Host": {
+      "path": "host/LaundrySaaS.Web.Host/LaundrySaaS.Web.Host.abppkg",
+      "folder": "host"
+    },
+    "LaundrySaaS.AuthServer": {
+      "path": "host/LaundrySaaS.AuthServer/LaundrySaaS.AuthServer.abppkg",
+      "folder": "host"
+    },
+    "LaundrySaaS.Host.Shared": {
+      "path": "host/LaundrySaaS.Host.Shared/LaundrySaaS.Host.Shared.abppkg",
+      "folder": "host"
+    },
+    "LaundrySaaS.Web.Unified": {
+      "path": "host/LaundrySaaS.Web.Unified/LaundrySaaS.Web.Unified.abppkg",
+      "folder": "host"
+    },
+    "LaundrySaaS.Blazor": {
+      "path": "src/LaundrySaaS.Blazor/LaundrySaaS.Blazor.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.Blazor.Host": {
+      "path": "host/LaundrySaaS.Blazor.Host/LaundrySaaS.Blazor.Host.abppkg",
+      "folder": "host"
+    },
+    "LaundrySaaS.Blazor.Server": {
+      "path": "src/LaundrySaaS.Blazor.Server/LaundrySaaS.Blazor.Server.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.Blazor.WebAssembly": {
+      "path": "src/LaundrySaaS.Blazor.WebAssembly/LaundrySaaS.Blazor.WebAssembly.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.Blazor.Server.Host": {
+      "path": "host/LaundrySaaS.Blazor.Server.Host/LaundrySaaS.Blazor.Server.Host.abppkg",
+      "folder": "host"
+    }
+  }
+}

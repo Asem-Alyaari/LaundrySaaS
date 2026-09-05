@@ -1,0 +1,54 @@
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.DependencyInjection;
+using LaundrySaaS.Localization;
+using LaundrySaaS.Web.Menus;
+using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.Mapperly;
+using Volo.Abp.Modularity;
+using Volo.Abp.UI.Navigation;
+using Volo.Abp.VirtualFileSystem;
+using LaundrySaaS.Permissions;
+
+namespace LaundrySaaS.Web;
+
+[DependsOn(
+    typeof(LaundrySaaSApplicationContractsModule),
+    typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+    typeof(AbpMapperlyModule)
+    )]
+public class LaundrySaaSWebModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+        {
+            options.AddAssemblyResource(typeof(LaundrySaaSResource), typeof(LaundrySaaSWebModule).Assembly);
+        });
+
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
+        {
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(LaundrySaaSWebModule).Assembly);
+        });
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpNavigationOptions>(options =>
+        {
+            options.MenuContributors.Add(new LaundrySaaSMenuContributor());
+        });
+
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<LaundrySaaSWebModule>();
+        });
+
+        context.Services.AddMapperlyObjectMapper<LaundrySaaSWebModule>();
+
+        Configure<RazorPagesOptions>(options =>
+        {
+                //Configure authorization.
+            });
+    }
+}

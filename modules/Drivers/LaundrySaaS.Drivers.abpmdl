@@ -1,0 +1,79 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "LaundrySaaS.Drivers.Domain.Shared": {
+      "path": "src/LaundrySaaS.Drivers.Domain.Shared/LaundrySaaS.Drivers.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.Drivers.Domain": {
+      "path": "src/LaundrySaaS.Drivers.Domain/LaundrySaaS.Drivers.Domain.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.Drivers.Application.Contracts": {
+      "path": "src/LaundrySaaS.Drivers.Application.Contracts/LaundrySaaS.Drivers.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.Drivers.Application": {
+      "path": "src/LaundrySaaS.Drivers.Application/LaundrySaaS.Drivers.Application.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.Drivers.EntityFrameworkCore": {
+      "path": "src/LaundrySaaS.Drivers.EntityFrameworkCore/LaundrySaaS.Drivers.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.Drivers.MongoDB": {
+      "path": "src/LaundrySaaS.Drivers.MongoDB/LaundrySaaS.Drivers.MongoDB.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.Drivers.HttpApi": {
+      "path": "src/LaundrySaaS.Drivers.HttpApi/LaundrySaaS.Drivers.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.Drivers.HttpApi.Client": {
+      "path": "src/LaundrySaaS.Drivers.HttpApi.Client/LaundrySaaS.Drivers.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "LaundrySaaS.Drivers.TestBase": {
+      "path": "test/LaundrySaaS.Drivers.TestBase/LaundrySaaS.Drivers.TestBase.abppkg",
+      "folder": "test"
+    },
+    "LaundrySaaS.Drivers.EntityFrameworkCore.Tests": {
+      "path": "test/LaundrySaaS.Drivers.EntityFrameworkCore.Tests/LaundrySaaS.Drivers.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "LaundrySaaS.Drivers.MongoDB.Tests": {
+      "path": "test/LaundrySaaS.Drivers.MongoDB.Tests/LaundrySaaS.Drivers.MongoDB.Tests.abppkg",
+      "folder": "test"
+    },
+    "LaundrySaaS.Drivers.Domain.Tests": {
+      "path": "test/LaundrySaaS.Drivers.Domain.Tests/LaundrySaaS.Drivers.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "LaundrySaaS.Drivers.Application.Tests": {
+      "path": "test/LaundrySaaS.Drivers.Application.Tests/LaundrySaaS.Drivers.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "LaundrySaaS.Drivers.HttpApi.Host": {
+      "path": "host/LaundrySaaS.Drivers.HttpApi.Host/LaundrySaaS.Drivers.HttpApi.Host.abppkg",
+      "folder": "host"
+    },
+    "LaundrySaaS.Drivers.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/LaundrySaaS.Drivers.HttpApi.Client.ConsoleTestApp/LaundrySaaS.Drivers.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "LaundrySaaS.Drivers.AuthServer": {
+      "path": "host/LaundrySaaS.Drivers.AuthServer/LaundrySaaS.Drivers.AuthServer.abppkg",
+      "folder": "host"
+    },
+    "LaundrySaaS.Drivers.Host.Shared": {
+      "path": "host/LaundrySaaS.Drivers.Host.Shared/LaundrySaaS.Drivers.Host.Shared.abppkg",
+      "folder": "host"
+    }
+  }
+}

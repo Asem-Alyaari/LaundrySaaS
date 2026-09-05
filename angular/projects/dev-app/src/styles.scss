@@ -1,0 +1,20 @@
+@import "ng-zorro-antd/ng-zorro-antd.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap');
+
+/* Global Root Variables & Reset */
+:root {
+  --lpx-logo: url('/assets/images/logo/logo-light.png');
+  --lpx-logo-icon: url('/assets/images/logo/logo-light-thumbnail.png');
+  --font-family-base: 'Cairo', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  font-family: var(--font-family-base);
+  direction: rtl;
+  text-align: right;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
+}
+
+

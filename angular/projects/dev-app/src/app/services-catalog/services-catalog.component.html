@@ -1,0 +1,677 @@
+<div class="services-catalog-container" dir="rtl">
+  <!-- Page Header -->
+  <nz-page-header class="page-header-card" [nzGhost]="false">
+    <!-- Breadcrumb -->
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item>
+        <a routerLink="/dashboard"><i nz-icon nzType="home"></i> الرئيسية</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a routerLink="/laundries-admin">إدارة المغاسل</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>كتالوج الخدمات والأقسام</nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <!-- Title & Subtitle -->
+    <nz-page-header-title>
+      <div class="header-title-wrapper">
+        <div class="header-icon-box">
+          <i nz-icon nzType="tags" nzTheme="outline"></i>
+        </div>
+        <div>
+          <h2 class="main-title">كتالوج الخدمات وإدارة الأقسام (Services & Categories Catalog)</h2>
+          <span class="sub-title">إدارة وتخصيص خدمات وأقسام كل مغسلة مشتركة في منظومة LaundrySaaS بشكل مستقل</span>
+        </div>
+      </div>
+    </nz-page-header-title>
+
+    <!-- Extra Action Buttons -->
+    <nz-page-header-extra>
+      <div class="header-actions">
+        <button nz-button nzType="default" (click)="openCreateCategoryModal(false)" nz-tooltip nzTooltipTitle="إضافة قسم وتصنيف جديد للمغسلة">
+          <i nz-icon nzType="folder-add"></i>
+          <span>إضافة قسم جديد</span>
+        </button>
+        <button nz-button nzType="default" (click)="importTemplateCatalog()" nz-tooltip nzTooltipTitle="استيراد وتوليد قائمة الخدمات النموذجية لهذه المغسلة">
+          <i nz-icon nzType="cloud-download"></i>
+          <span>استيراد كتالوج قياسي</span>
+        </button>
+        <button nz-button nzType="default" (click)="loadServices()" [nzLoading]="loading">
+          <i nz-icon nzType="reload"></i>
+          <span>تحديث</span>
+        </button>
+        <button nz-button nzType="primary" class="add-service-btn" (click)="openCreateModal()">
+          <i nz-icon nzType="plus-circle" nzTheme="outline"></i>
+          <span>إضافة خدمة للمغسلة</span>
+        </button>
+      </div>
+    </nz-page-header-extra>
+  </nz-page-header>
+
+  <!-- Super Admin Laundry Context Switcher Bar -->
+  <div class="laundry-context-bar">
+    <div class="context-label-group">
+      <div class="shop-badge-icon"><i nz-icon nzType="shop"></i></div>
+      <div class="context-text">
+        <span class="label">المغسلة المحددة حالياً (Tenant Laundry):</span>
+        <h3 class="active-laundry-name">{{ selectedLaundry?.name || 'جاري التحميل...' }}</h3>
+      </div>
+    </div>
+
+    <div class="context-controls">
+      <div class="laundry-select-wrapper">
+        <label class="select-hint">تبديل المغسلة / الفرع:</label>
+        <nz-select
+          [ngModel]="selectedLaundryId"
+          (ngModelChange)="onLaundryChange($event)"
+          [nzLoading]="loadingLaundries"
+          class="laundry-dropdown"
+          nzShowSearch
+          nzPlaceHolder="اختر المغسلة لإدارة كتالوجها..."
+        >
+          <nz-option
+            *ngFor="let lnd of laundries"
+            [nzValue]="lnd.id"
+            [nzLabel]="lnd.name + ' (' + (lnd.editionName || 'Pro') + ')'"
+          ></nz-option>
+        </nz-select>
+      </div>
+
+      <a routerLink="/laundries-admin" class="all-laundries-link">
+        <i nz-icon nzType="unordered-list"></i>
+        <span>عرض كافة المغاسل</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Overview Stats Row Specific to Selected Laundry -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon-wrapper total-icon">
+        <i nz-icon nzType="appstore"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">خدمات هذه المغسلة</span>
+        <h3 class="stat-number">{{ totalCount }} خدمة</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper active-icon">
+        <i nz-icon nzType="check-circle"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">الخدمات النشطة للطلب</span>
+        <h3 class="stat-number active-text">{{ activeCount }} مفعلة</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper price-icon">
+        <i nz-icon nzType="transaction"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">متوسط أسعار المغسلة</span>
+        <h3 class="stat-number price-text">{{ avgPrice }} ر.س</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper categories-icon">
+        <i nz-icon nzType="folder-open"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">أقسام وتصنيفات الخدمات</span>
+        <h3 class="stat-number">{{ categories.length }} أقسام</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section Navigation Tab Bar (Services Catalog vs Categories Management) -->
+  <div class="view-tab-switcher">
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="activeTab === 'services'"
+      (click)="activeTab = 'services'"
+    >
+      <i nz-icon nzType="tags"></i>
+      <span>كتالوج الخدمات والأسعار ({{ totalCount }})</span>
+    </button>
+
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="activeTab === 'categories'"
+      (click)="activeTab = 'categories'"
+    >
+      <i nz-icon nzType="appstore"></i>
+      <span>إدارة الأقسام والتصنيفات ({{ categories.length }})</span>
+    </button>
+  </div>
+
+  <!-- TAB 1: SERVICES CATALOG -->
+  <ng-container *ngIf="activeTab === 'services'">
+    <!-- Category Filter Pills Bar -->
+    <div class="category-filter-bar">
+      <button
+        type="button"
+        class="cat-filter-btn"
+        [class.active]="selectedCategoryId === 'all'"
+        (click)="onCategorySelect('all')"
+      >
+        <i nz-icon nzType="appstore"></i>
+        <span>جميع الأقسام (الكل)</span>
+      </button>
+
+      <button
+        type="button"
+        class="cat-filter-btn"
+        *ngFor="let cat of categories"
+        [class.active]="selectedCategoryId === cat.id"
+        (click)="onCategorySelect(cat.id)"
+      >
+        <i nz-icon [nzType]="cat.icon || 'tag'"></i>
+        <span>{{ cat.name }}</span>
+      </button>
+    </div>
+
+    <!-- Table Card & Filter Bar -->
+    <nz-card class="content-table-card" [nzBordered]="false">
+      <!-- Search & Filter Controls -->
+      <div class="table-toolbar">
+        <div class="search-input-group">
+          <nz-input-group [nzPrefix]="searchPrefix" [nzSuffix]="searchSuffix" class="custom-search-input">
+            <input
+              type="text"
+              nz-input
+              [placeholder]="'بحث في خدمات مغسلة ' + (selectedLaundry?.name || '') + '...'"
+              [(ngModel)]="searchTerm"
+              (keyup.enter)="onSearch()"
+            />
+          </nz-input-group>
+          <ng-template #searchPrefix>
+            <i nz-icon nzType="search" class="search-icon"></i>
+          </ng-template>
+          <ng-template #searchSuffix>
+            <i
+              nz-icon
+              nzType="close-circle"
+              nzTheme="fill"
+              class="clear-icon"
+              *ngIf="searchTerm"
+              (click)="searchTerm = ''; onSearch()"
+            ></i>
+          </ng-template>
+          <button nz-button nzType="primary" (click)="onSearch()" class="search-btn">
+            بحث
+          </button>
+        </div>
+
+        <div class="toolbar-info">
+          <span class="results-count">خدمات مغسلة ({{ selectedLaundry?.name }}): <strong>{{ totalCount }}</strong> خدمة</span>
+        </div>
+      </div>
+
+      <!-- Services Table -->
+      <nz-table
+        #servicesTable
+        [nzData]="services"
+        [nzLoading]="loading"
+        [nzFrontPagination]="false"
+        [nzTotal]="totalCount"
+        [nzPageIndex]="pageIndex"
+        [nzPageSize]="pageSize"
+        [nzShowSizeChanger]="true"
+        [nzPageSizeOptions]="[5, 10, 20, 50]"
+        (nzPageIndexChange)="onPageIndexChange($event)"
+        (nzPageSizeChange)="onPageSizeChange($event)"
+        [nzScroll]="{ x: '920px' }"
+        class="custom-services-table"
+      >
+        <thead>
+          <tr>
+            <th nzWidth="50px" class="text-center">#</th>
+            <th nzWidth="280px">اسم الخدمة والتفاصيل</th>
+            <th nzWidth="190px">التصنيف والقسم</th>
+            <th nzWidth="140px">السعر والوحدة</th>
+            <th nzWidth="130px" class="text-center">مدة التنفيذ</th>
+            <th nzWidth="110px" class="text-center">الحالة</th>
+            <th nzWidth="180px" class="text-center">الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let service of servicesTable.data; let i = index" [class.inactive-row]="!service.isActive">
+            <td class="text-center row-index">{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+            <td>
+              <div class="service-identity">
+                <div class="service-avatar" [class.inactive-avatar]="!service.isActive">
+                  <i nz-icon [nzType]="service.icon || 'skin'"></i>
+                </div>
+                <div class="service-details">
+                  <span class="service-name">{{ service.name }}</span>
+                  <span class="service-desc">{{ service.description || 'خدمة غسيل وكي مخصصة لهذه المغسلة' }}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <nz-tag [nzColor]="getCategoryColor(service.categoryId)" class="category-tag">
+                {{ service.categoryName || getCategoryName(service.categoryId) }}
+              </nz-tag>
+            </td>
+            <td>
+              <div class="price-cell">
+                <span class="price-val"><strong>{{ service.price }}</strong> ر.س</span>
+                <span class="unit-val">/ {{ service.unit || 'قطعة' }}</span>
+              </div>
+            </td>
+            <td class="text-center">
+              <span class="duration-badge">
+                <i nz-icon nzType="clock-circle"></i>
+                <span>{{ service.durationHours || 24 }} ساعة</span>
+              </span>
+            </td>
+            <td class="text-center">
+              <nz-tag *ngIf="service.isActive" nzColor="success" class="status-tag">
+                <i nz-icon nzType="check-circle"></i>
+                <span>مفعلة</span>
+              </nz-tag>
+              <nz-tag *ngIf="!service.isActive" nzColor="default" class="status-tag inactive-tag">
+                <i nz-icon nzType="stop"></i>
+                <span>معطلة</span>
+              </nz-tag>
+            </td>
+            <td class="text-center">
+              <div class="actions-wrapper">
+                <!-- Edit Button -->
+                <button
+                  nz-button
+                  nzType="default"
+                  nzSize="small"
+                  class="action-btn edit-btn"
+                  (click)="openEditModal(service)"
+                  nz-tooltip
+                  nzTooltipTitle="تعديل سعر وتفاصيل الخدمة"
+                >
+                  <i nz-icon nzType="edit"></i>
+                  <span>تعديل</span>
+                </button>
+
+                <!-- Toggle Active Button -->
+                <button
+                  nz-button
+                  nzType="default"
+                  nzSize="small"
+                  class="action-btn toggle-btn"
+                  [class.activate-style]="!service.isActive"
+                  (click)="toggleServiceStatus(service)"
+                  nz-tooltip
+                  [nzTooltipTitle]="service.isActive ? 'تعطيل الخدمة للمغسلة' : 'تفعيل الخدمة للمغسلة'"
+                >
+                  <i nz-icon [nzType]="service.isActive ? 'pause' : 'play-circle'"></i>
+                </button>
+
+                <!-- Delete Button with Popconfirm -->
+                <button
+                  nz-button
+                  nzType="default"
+                  nzDanger
+                  nzSize="small"
+                  class="action-btn delete-btn"
+                  nz-popconfirm
+                  nzPopconfirmTitle="هل أنت متأكد من حذف هذه الخدمة من قائمة هذه المغسلة؟"
+                  nzOkText="نعم، حذف"
+                  nzCancelText="إلغاء"
+                  nzOkDanger="true"
+                  (nzOnConfirm)="deleteService(service)"
+                  nz-tooltip
+                  nzTooltipTitle="حذف الخدمة"
+                >
+                  <i nz-icon nzType="delete"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </ng-container>
+
+  <!-- TAB 2: CATEGORIES & DEPARTMENTS MANAGEMENT -->
+  <ng-container *ngIf="activeTab === 'categories'">
+    <nz-card class="content-table-card" [nzBordered]="false">
+      <!-- Toolbar & Actions -->
+      <div class="table-toolbar">
+        <div class="toolbar-info">
+          <span class="results-count">أقسام وتصنيفات مغسلة ({{ selectedLaundry?.name }}): <strong>{{ categories.length }}</strong> قسم</span>
+        </div>
+
+        <button nz-button nzType="primary" (click)="openCreateCategoryModal(false)">
+          <i nz-icon nzType="plus-circle"></i>
+          <span>إضافة تصنيف جديد</span>
+        </button>
+      </div>
+
+      <!-- Categories Table -->
+      <nz-table
+        #categoriesTable
+        [nzData]="categories"
+        [nzFrontPagination]="true"
+        [nzPageSize]="10"
+        class="custom-categories-table"
+      >
+        <thead>
+          <tr>
+            <th nzWidth="60px" class="text-center">#</th>
+            <th nzWidth="260px">اسم القسم / التصنيف (Category Name)</th>
+            <th nzWidth="200px">الأيقونة واللون المخصص</th>
+            <th nzWidth="140px" class="text-center">ترتيب الظهور</th>
+            <th nzWidth="180px" class="text-center">الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let category of categoriesTable.data; let i = index">
+            <td class="text-center row-index">{{ i + 1 }}</td>
+            <td>
+              <div class="category-identity">
+                <div class="category-avatar" [style.backgroundColor]="category.color || '#0284c7'">
+                  <i nz-icon [nzType]="category.icon || 'folder'"></i>
+                </div>
+                <div class="category-details">
+                  <span class="category-name">{{ category.name }}</span>
+                  <span class="category-sub">قسم خدمات رئيسي للمغسلة</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <nz-tag [nzColor]="category.color || 'blue'" class="category-badge-tag">
+                <i nz-icon [nzType]="category.icon || 'tag'"></i>
+                <span>{{ category.color || 'blue' }}</span>
+              </nz-tag>
+            </td>
+            <td class="text-center font-bold">
+              <span class="order-badge">#{{ category.displayOrder || 0 }}</span>
+            </td>
+            <td class="text-center">
+              <div class="actions-wrapper">
+                <button
+                  nz-button
+                  nzType="default"
+                  nzSize="small"
+                  class="action-btn edit-btn"
+                  (click)="openEditCategoryModal(category)"
+                  nz-tooltip
+                  nzTooltipTitle="تعديل اسم ولون التصنيف"
+                >
+                  <i nz-icon nzType="edit"></i>
+                  <span>تعديل</span>
+                </button>
+
+                <button
+                  nz-button
+                  nzType="default"
+                  nzDanger
+                  nzSize="small"
+                  class="action-btn delete-btn"
+                  nz-popconfirm
+                  nzPopconfirmTitle="هل أنت متأكد من حذف هذا التصنيف؟"
+                  nzOkText="نعم، حذف"
+                  nzCancelText="إلغاء"
+                  nzOkDanger="true"
+                  (nzOnConfirm)="deleteCategory(category)"
+                  nz-tooltip
+                  nzTooltipTitle="حذف التصنيف"
+                >
+                  <i nz-icon nzType="delete"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </ng-container>
+
+  <!-- Create / Edit Service Modal -->
+  <nz-modal
+    [(nzVisible)]="isModalVisible"
+    [nzTitle]="modalTitleTemplate"
+    (nzOnCancel)="handleModalCancel()"
+    (nzOnOk)="handleFormSubmit()"
+    [nzOkLoading]="isSubmitting"
+    [nzOkText]="isEditMode ? 'حفظ التعديلات' : 'إضافة الخدمة للمغسلة'"
+    [nzCancelText]="'إلغاء'"
+    [nzWidth]="620"
+    [nzMaskClosable]="false"
+    class="custom-service-modal"
+  >
+    <ng-template #modalTitleTemplate>
+      <div class="modal-header-content">
+        <i nz-icon [nzType]="isEditMode ? 'edit' : 'plus-circle'" class="modal-title-icon"></i>
+        <span>{{ isEditMode ? 'تعديل خدمة لمغسلة: ' + (selectedLaundry?.name || '') : 'إضافة خدمة جديدة لمغسلة: ' + (selectedLaundry?.name || '') }}</span>
+      </div>
+    </ng-template>
+
+    <ng-container *nzModalContent>
+      <!-- Target Laundry Notice -->
+      <nz-alert
+        nzType="info"
+        [nzMessage]="'سيتم حفظ هذه الخدمة والأسعار خصيصاً لمغسلة: ' + (selectedLaundry?.name || '')"
+        nzShowIcon
+        class="modal-laundry-notice"
+      ></nz-alert>
+
+      <form nz-form [formGroup]="serviceForm" nzLayout="vertical" class="service-form">
+        <!-- Service Name -->
+        <nz-form-item>
+          <nz-form-label nzRequired nzFor="name">اسم الخدمة (Service Name)</nz-form-label>
+          <nz-form-control [nzErrorTip]="nameErrorTpl">
+            <nz-input-group [nzPrefix]="tagPrefix">
+              <input
+                nz-input
+                id="name"
+                formControlName="name"
+                placeholder="مثال: ثوب رجالي - غسيل وكي بخار خاص"
+              />
+            </nz-input-group>
+            <ng-template #tagPrefix><i nz-icon nzType="tag"></i></ng-template>
+            <ng-template #nameErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('required')">اسم الخدمة مطلوب ولا يمكن تركه فارغاً</ng-container>
+              <ng-container *ngIf="control.hasError('maxlength')">الحد الأقصى للاسم هو 128 حرفاً</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Category & Unit Grid -->
+        <div class="form-row-grid">
+          <!-- Category with Inline Quick Add Button -->
+          <nz-form-item>
+            <nz-form-label nzRequired nzFor="categoryId">تصنيف وقسم الخدمة</nz-form-label>
+            <nz-form-control>
+              <div class="category-select-group">
+                <nz-select id="categoryId" formControlName="categoryId" nzPlaceHolder="اختر التصنيف" class="flex-grow">
+                  <nz-option
+                    *ngFor="let cat of categories"
+                    [nzValue]="cat.id"
+                    [nzLabel]="cat.name"
+                  ></nz-option>
+                </nz-select>
+                <button
+                  nz-button
+                  nzType="default"
+                  type="button"
+                  (click)="openCreateCategoryModal(true)"
+                  nz-tooltip
+                  nzTooltipTitle="إضافة تصنيف جديد فورياً دون إغلاق هذا النموذج"
+                >
+                  <i nz-icon nzType="plus"></i>
+                  <span>تصنيف جديد</span>
+                </button>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- Unit of Measurement -->
+          <nz-form-item>
+            <nz-form-label nzRequired nzFor="unit">وحدة التسعير (Unit)</nz-form-label>
+            <nz-form-control>
+              <nz-select id="unit" formControlName="unit" nzPlaceHolder="اختر الوحدة">
+                <nz-option
+                  *ngFor="let u of availableUnits"
+                  [nzValue]="u.value"
+                  [nzLabel]="u.label"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- Price & Turnaround Hours Grid -->
+        <div class="form-row-grid">
+          <!-- Price -->
+          <nz-form-item>
+            <nz-form-label nzRequired nzFor="price">سعر الخدمة للمغسلة (ر.س)</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                id="price"
+                formControlName="price"
+                [nzMin]="0.5"
+                [nzStep]="1"
+                class="full-width-number"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- Duration Hours -->
+          <nz-form-item>
+            <nz-form-label nzRequired nzFor="durationHours">المدة التقديرية للإنجاز (بالساعات)</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                id="durationHours"
+                formControlName="durationHours"
+                [nzMin]="1"
+                [nzStep]="12"
+                class="full-width-number"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- Description -->
+        <nz-form-item>
+          <nz-form-label nzFor="description">وصف الخدمة وملاحظات العناية</nz-form-label>
+          <nz-form-control>
+            <textarea
+              nz-input
+              id="description"
+              formControlName="description"
+              rows="3"
+              placeholder="تفاصيل طريقة الغسيل، الكي، التعطير، ومواد التعقيم والتغليف المستخدمة..."
+            ></textarea>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Active Switch -->
+        <nz-form-item class="switch-item">
+          <div class="switch-row">
+            <div>
+              <span class="switch-title">تفعيل الخدمة في كتالوج المغسلة</span>
+              <span class="switch-desc">إتاحة الخدمة للعملاء والمناديب عند الطلب من هذه المغسلة</span>
+            </div>
+            <nz-switch formControlName="isActive"></nz-switch>
+          </div>
+        </nz-form-item>
+      </form>
+    </ng-container>
+  </nz-modal>
+
+  <!-- Create / Edit Category Modal -->
+  <nz-modal
+    [(nzVisible)]="isCategoryModalVisible"
+    [nzTitle]="catModalTitleTemplate"
+    (nzOnCancel)="handleCategoryModalCancel()"
+    (nzOnOk)="handleCategoryFormSubmit()"
+    [nzOkLoading]="isCategorySubmitting"
+    [nzOkText]="isCategoryEditMode ? 'حفظ التعديلات' : 'إضافة القسم والتصنيف'"
+    [nzCancelText]="'إلغاء'"
+    [nzWidth]="520"
+    [nzMaskClosable]="false"
+    class="custom-category-modal"
+  >
+    <ng-template #catModalTitleTemplate>
+      <div class="modal-header-content">
+        <i nz-icon [nzType]="isCategoryEditMode ? 'edit' : 'folder-add'" class="modal-title-icon"></i>
+        <span>{{ isCategoryEditMode ? 'تعديل بيانات القسم / التصنيف' : 'إضافة قسم وتصنيف جديد للمغسلة' }}</span>
+      </div>
+    </ng-template>
+
+    <ng-container *nzModalContent>
+      <form nz-form [formGroup]="categoryForm" nzLayout="vertical" class="category-form">
+        <!-- Category Name -->
+        <nz-form-item>
+          <nz-form-label nzRequired nzFor="catName">اسم القسم / التصنيف (Category Name)</nz-form-label>
+          <nz-form-control [nzErrorTip]="catNameErrorTpl">
+            <nz-input-group [nzPrefix]="catPrefix">
+              <input
+                nz-input
+                id="catName"
+                formControlName="name"
+                placeholder="مثال: غسيل وكي الملابس الرسمية"
+              />
+            </nz-input-group>
+            <ng-template #catPrefix><i nz-icon nzType="folder"></i></ng-template>
+            <ng-template #catNameErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('required')">اسم القسم مطلوب ولا يمكن تركه فارغاً</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Icon & Color Selection Grid -->
+        <div class="form-row-grid">
+          <!-- Icon Picker -->
+          <nz-form-item>
+            <nz-form-label nzRequired nzFor="catIcon">أيقونة التصنيف البصرية</nz-form-label>
+            <nz-form-control>
+              <nz-select id="catIcon" formControlName="icon" nzPlaceHolder="اختر الأيقونة">
+                <nz-option
+                  *ngFor="let ic of availableIcons"
+                  [nzValue]="ic.value"
+                  [nzLabel]="ic.label"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- Color Picker -->
+          <nz-form-item>
+            <nz-form-label nzRequired nzFor="catColor">لون بادج التمييز</nz-form-label>
+            <nz-form-control>
+              <nz-select id="catColor" formControlName="color" nzPlaceHolder="اختر اللون">
+                <nz-option
+                  *ngFor="let cl of availableColors"
+                  [nzValue]="cl.value"
+                  [nzLabel]="cl.label"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- Display Order -->
+        <nz-form-item>
+          <nz-form-label nzRequired nzFor="displayOrder">ترتيب الظهور في الكتالوج</nz-form-label>
+          <nz-form-control>
+            <nz-input-number
+              id="displayOrder"
+              formControlName="displayOrder"
+              [nzMin]="0"
+              [nzStep]="5"
+              class="full-width-number"
+            ></nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-container>
+  </nz-modal>
+</div>
+

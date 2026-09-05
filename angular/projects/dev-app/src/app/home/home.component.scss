@@ -1,0 +1,370 @@
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  direction: rtl;
+  text-align: right;
+  font-family: 'Cairo', sans-serif;
+}
+
+/* Toolbar Header */
+.dashboard-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  padding: 18px 24px;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  flex-wrap: wrap;
+  gap: 16px;
+
+  .toolbar-title {
+    h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      color: #1f1f1f;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #8c8c8c;
+    }
+  }
+
+  .toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+
+    .export-btn {
+      border-radius: 8px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  }
+}
+
+/* Primary Metric KPI Cards Grid */
+.kpi-grid {
+  margin-top: 2px;
+}
+
+.kpi-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+  }
+
+  .kpi-icon-wrapper {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: #ffffff;
+    flex-shrink: 0;
+  }
+
+  .kpi-details {
+    flex: 1;
+
+    .kpi-label {
+      font-size: 13px;
+      color: #8c8c8c;
+      font-weight: 600;
+
+    }
+
+    .kpi-value {
+      margin: 4px 0 8px 0;
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f1f1f;
+
+      small {
+        font-size: 13px;
+        font-weight: 600;
+        color: #8c8c8c;
+      }
+    }
+
+    .kpi-badge {
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 6px;
+
+      span {
+        color: #8c8c8c;
+        font-weight: 400;
+      }
+
+      &.positive {
+        background: rgba(82, 196, 26, 0.1);
+        color: #52c41a;
+      }
+
+      &.neutral {
+        background: rgba(24, 144, 255, 0.1);
+        color: #1890ff;
+      }
+    }
+  }
+
+  &.gradient-blue .kpi-icon-wrapper {
+    background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  }
+  &.gradient-green .kpi-icon-wrapper {
+    background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+  }
+  &.gradient-purple .kpi-icon-wrapper {
+    background: linear-gradient(135deg, #722ed1 0%, #531dab 100%);
+  }
+  &.gradient-orange .kpi-icon-wrapper {
+    background: linear-gradient(135deg, #fa8c16 0%, #d46b08 100%);
+  }
+}
+
+/* Chart & Section Cards */
+.chart-card,
+.section-card {
+  ::ng-deep .ant-card {
+    border-radius: 14px;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  }
+
+  ::ng-deep .ant-card-head {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 0 24px;
+    min-height: 56px;
+
+    .ant-card-head-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #1f1f1f;
+    }
+  }
+
+  .sub-text {
+    font-size: 13px;
+    color: #8c8c8c;
+  }
+}
+
+/* Surveys Breakdown List */
+.survey-metrics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 8px 0;
+
+  .survey-item {
+    .survey-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+
+      .survey-title-wrap {
+        strong {
+          font-size: 14px;
+          color: #262626;
+        }
+        .survey-count {
+          font-size: 12px;
+          color: #8c8c8c;
+          margin-right: 6px;
+        }
+      }
+
+      .survey-rating-badge {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 700;
+        font-size: 13px;
+        color: #fa8c16;
+
+        .star-icon {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+/* Reviews List */
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .review-card {
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 14px;
+    border: 1px solid #f0f0f0;
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .avatar {
+          background-color: #1890ff;
+        }
+
+        .user-name {
+          margin: 0;
+          font-size: 14px;
+          font-weight: 700;
+          color: #262626;
+        }
+
+        .laundry-tag {
+          font-size: 11px;
+          color: #8c8c8c;
+        }
+      }
+
+      .review-time {
+        font-size: 11px;
+        color: #bfbfbf;
+      }
+    }
+
+    .review-stars {
+      margin-bottom: 6px;
+      ::ng-deep .ant-rate-star {
+        font-size: 14px;
+        margin-inline-end: 2px;
+      }
+    }
+
+    .review-comment {
+      margin: 0;
+      font-size: 13px;
+      color: #595959;
+      font-style: italic;
+    }
+  }
+}
+
+/* Top Laundries Table */
+.table-rating {
+  font-weight: 700;
+  color: #fa8c16;
+}
+
+/* Drivers Fleet Summary */
+.drivers-fleet-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+
+  .driver-stat-box {
+    border-radius: 10px;
+    padding: 16px 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .stat-num {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .stat-lbl {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    &.available {
+      background: rgba(82, 196, 26, 0.08);
+      color: #389e0d;
+      border: 1px solid rgba(82, 196, 26, 0.2);
+    }
+
+    &.busy {
+      background: rgba(24, 144, 255, 0.08);
+      color: #096dd9;
+      border: 1px solid rgba(24, 144, 255, 0.2);
+    }
+
+    &.offline {
+      background: rgba(140, 140, 140, 0.08);
+      color: #595959;
+      border: 1px solid rgba(140, 140, 140, 0.2);
+    }
+  }
+}
+
+.fleet-progress-section {
+  margin-bottom: 24px;
+
+  .progress-title {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #595959;
+  }
+}
+
+.quick-action-box {
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .car-icon {
+    font-size: 24px;
+    color: #52c41a;
+  }
+
+  div {
+    flex: 1;
+    strong {
+      display: block;
+      font-size: 13px;
+      color: #262626;
+    }
+    p {
+      margin: 0;
+      font-size: 11px;
+      color: #8c8c8c;
+    }
+  }
+}

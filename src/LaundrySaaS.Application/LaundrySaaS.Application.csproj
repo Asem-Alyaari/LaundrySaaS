@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>LaundrySaaS</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Mapperly" Version="10.6.0" />
+    <PackageReference Include="Volo.Abp.Ddd.Application" Version="10.6.0" />
+    <ProjectReference Include="..\LaundrySaaS.Application.Contracts\LaundrySaaS.Application.Contracts.csproj" />
+    <ProjectReference Include="..\LaundrySaaS.Domain\LaundrySaaS.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\Customers\src\LaundrySaaS.Customers.Application\LaundrySaaS.Customers.Application.csproj" />
+    <ProjectReference Include="..\..\modules\Customers\src\LaundrySaaS.Customers.Domain\LaundrySaaS.Customers.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\Drivers\src\LaundrySaaS.Drivers.Application\LaundrySaaS.Drivers.Application.csproj" />
+    <ProjectReference Include="..\..\modules\Drivers\src\LaundrySaaS.Drivers.Domain\LaundrySaaS.Drivers.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\Orders\src\LaundrySaaS.Orders.Application\LaundrySaaS.Orders.Application.csproj" />
+    <ProjectReference Include="..\..\modules\Orders\src\LaundrySaaS.Orders.Domain\LaundrySaaS.Orders.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\Laundries\src\LaundrySaaS.Laundries.Application\LaundrySaaS.Laundries.Application.csproj" />
+    <ProjectReference Include="..\..\modules\Laundries\src\LaundrySaaS.Laundries.Domain\LaundrySaaS.Laundries.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

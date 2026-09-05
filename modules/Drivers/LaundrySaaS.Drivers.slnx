@@ -1,0 +1,36 @@
+<Solution>
+  <Folder Name="/host/">
+    <Project Path="host/LaundrySaaS.Drivers.AuthServer/LaundrySaaS.Drivers.AuthServer.csproj" />
+    
+    
+    
+    <Project Path="host/LaundrySaaS.Drivers.Host.Shared/LaundrySaaS.Drivers.Host.Shared.csproj" />
+    <Project Path="host/LaundrySaaS.Drivers.HttpApi.Host/LaundrySaaS.Drivers.HttpApi.Host.csproj" />
+    
+    
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/LaundrySaaS.Drivers.Application.Contracts/LaundrySaaS.Drivers.Application.Contracts.csproj" />
+    <Project Path="src/LaundrySaaS.Drivers.Application/LaundrySaaS.Drivers.Application.csproj" />
+    
+    <Project Path="src/LaundrySaaS.Drivers.Blazor.WebAssembly.Bundling/LaundrySaaS.Drivers.Blazor.WebAssembly.Bundling.csproj" />
+    
+    
+    <Project Path="src/LaundrySaaS.Drivers.Domain.Shared/LaundrySaaS.Drivers.Domain.Shared.csproj" />
+    <Project Path="src/LaundrySaaS.Drivers.Domain/LaundrySaaS.Drivers.Domain.csproj" />
+    <Project Path="src/LaundrySaaS.Drivers.EntityFrameworkCore/LaundrySaaS.Drivers.EntityFrameworkCore.csproj" />
+    <Project Path="src/LaundrySaaS.Drivers.HttpApi.Client/LaundrySaaS.Drivers.HttpApi.Client.csproj" />
+    <Project Path="src/LaundrySaaS.Drivers.HttpApi/LaundrySaaS.Drivers.HttpApi.csproj" />
+    <Project Path="src/LaundrySaaS.Drivers.Installer/LaundrySaaS.Drivers.Installer.csproj" />
+    <Project Path="src/LaundrySaaS.Drivers.MongoDB/LaundrySaaS.Drivers.MongoDB.csproj" />
+    
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/LaundrySaaS.Drivers.Application.Tests/LaundrySaaS.Drivers.Application.Tests.csproj" />
+    <Project Path="test/LaundrySaaS.Drivers.Domain.Tests/LaundrySaaS.Drivers.Domain.Tests.csproj" />
+    <Project Path="test/LaundrySaaS.Drivers.EntityFrameworkCore.Tests/LaundrySaaS.Drivers.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/LaundrySaaS.Drivers.HttpApi.Client.ConsoleTestApp/LaundrySaaS.Drivers.HttpApi.Client.ConsoleTestApp.csproj" />
+    <Project Path="test/LaundrySaaS.Drivers.MongoDB.Tests/LaundrySaaS.Drivers.MongoDB.Tests.csproj" />
+    <Project Path="test/LaundrySaaS.Drivers.TestBase/LaundrySaaS.Drivers.TestBase.csproj" />
+  </Folder>
+</Solution>

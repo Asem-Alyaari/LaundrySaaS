@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "LaundrySaaS.Drivers": {
+      "path": "LaundrySaaS.Drivers.abpmdl"
+    }
+  }
+}

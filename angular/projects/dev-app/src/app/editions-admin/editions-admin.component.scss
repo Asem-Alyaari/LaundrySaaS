@@ -1,0 +1,412 @@
+.editions-admin-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-family: 'Cairo', sans-serif;
+
+  /* Page Header Card */
+  .page-header-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 16px 24px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+    .header-title-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+
+      .header-icon-box {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #7c3aed, #4f46e5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 20px;
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+      }
+
+      .main-title {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 800;
+        color: #0f172a;
+      }
+
+      .sub-title {
+        font-size: 12px;
+        color: #64748b;
+        font-weight: 500;
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .add-edition-btn {
+        background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+        border: none;
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
+        font-weight: 700;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        &:hover {
+          background: linear-gradient(135deg, #6d28d9 0%, #4f46e5 100%);
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
+
+  /* Overview Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+
+    .stat-card {
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      }
+
+      .stat-icon-wrapper {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+
+        &.edition-icon {
+          background: #f5f3ff;
+          color: #7c3aed;
+        }
+
+        &.pro-icon {
+          background: #fefce8;
+          color: #ca8a04;
+        }
+
+        &.tenants-icon {
+          background: #f0f9ff;
+          color: #0284c7;
+        }
+      }
+
+      .stat-info {
+        display: flex;
+        flex-direction: column;
+
+        .stat-label {
+          font-size: 12px;
+          color: #64748b;
+          font-weight: 600;
+        }
+
+        .stat-number {
+          margin: 2px 0 0 0;
+          font-size: 20px;
+          font-weight: 800;
+          color: #0f172a;
+
+          &.pro-text {
+            font-size: 16px;
+            color: #ca8a04;
+          }
+        }
+      }
+    }
+  }
+
+  /* Table Card */
+  .content-table-card {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+    ::ng-deep .ant-card-body {
+      padding: 20px;
+    }
+
+    .table-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+
+      .search-input-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+        max-width: 420px;
+
+        .custom-search-input {
+          border-radius: 8px;
+          border-color: #cbd5e1;
+
+          .search-icon {
+            color: #94a3b8;
+          }
+
+          .clear-icon {
+            color: #94a3b8;
+            cursor: pointer;
+            &:hover {
+              color: #475569;
+            }
+          }
+        }
+
+        .search-btn {
+          border-radius: 8px;
+          background: #7c3aed;
+          border-color: #7c3aed;
+        }
+      }
+
+      .toolbar-info {
+        .results-count {
+          font-size: 13px;
+          color: #64748b;
+          strong {
+            color: #0f172a;
+          }
+        }
+      }
+    }
+
+    /* Custom Table */
+    .custom-editions-table {
+      ::ng-deep .ant-table {
+        background: transparent;
+        font-family: 'Cairo', sans-serif;
+
+        thead > tr > th {
+          background: #f8fafc;
+          color: #475569;
+          font-weight: 700;
+          font-size: 13px;
+          border-bottom: 1px solid #e2e8f0;
+          padding: 12px 16px;
+        }
+
+        tbody > tr > td {
+          padding: 14px 16px;
+          border-bottom: 1px solid #f1f5f9;
+          vertical-align: middle;
+          font-size: 13.5px;
+        }
+
+        tbody > tr:hover > td {
+          background: #f8fafc;
+        }
+      }
+
+      .row-index {
+        color: #94a3b8;
+        font-weight: 600;
+      }
+
+      .edition-identity {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .edition-avatar {
+          width: 38px;
+          height: 38px;
+          border-radius: 10px;
+          background: #f5f3ff;
+          color: #7c3aed;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          flex-shrink: 0;
+
+          &.pro-avatar {
+            background: #fefce8;
+            color: #ca8a04;
+          }
+
+          &.ent-avatar {
+            background: #faf5ff;
+            color: #9333ea;
+          }
+        }
+
+        .edition-details {
+          display: flex;
+          flex-direction: column;
+
+          .edition-name {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 14px;
+          }
+
+          .edition-sub {
+            font-size: 11px;
+            color: #64748b;
+          }
+        }
+      }
+
+      .plan-tag {
+        font-weight: 700;
+        padding: 2px 10px;
+        border-radius: 10px;
+      }
+
+      .price-box {
+        display: flex;
+        flex-direction: column;
+
+        .monthly-price {
+          color: #0f172a;
+          font-size: 13px;
+          strong {
+            font-size: 15px;
+            color: #0284c7;
+          }
+        }
+
+        .annual-price {
+          font-size: 11px;
+          color: #64748b;
+        }
+      }
+
+      .status-badge {
+        font-weight: 700;
+        padding: 2px 10px;
+        border-radius: 12px;
+      }
+
+      .actions-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+
+        .action-btn {
+          border-radius: 6px;
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 12px;
+
+          &.edit-btn {
+            color: #7c3aed;
+            border-color: #ddd6fe;
+            background: #f5f3ff;
+            &:hover {
+              background: #ede9fe;
+              border-color: #7c3aed;
+            }
+          }
+
+          &.delete-btn {
+            &:hover {
+              background: #fef2f2;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Modal Styling */
+.modal-header-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: #0f172a;
+
+  .modal-title-icon {
+    color: #7c3aed;
+    font-size: 18px;
+  }
+}
+
+.edition-form {
+  margin-top: 8px;
+
+  nz-form-item {
+    margin-bottom: 16px;
+
+    nz-form-label {
+      font-weight: 700;
+      color: #334155;
+    }
+
+    input, nz-select {
+      border-radius: 8px;
+    }
+  }
+
+  .switch-form-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 12px 16px;
+    border-radius: 10px;
+
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .switch-title {
+        display: block;
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 13px;
+      }
+
+      .switch-subtitle {
+        display: block;
+        color: #64748b;
+        font-size: 11px;
+      }
+    }
+  }
+
+  .pricing-inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+
+    .price-number-input {
+      width: 100%;
+      border-radius: 8px;
+    }
+  }
+}

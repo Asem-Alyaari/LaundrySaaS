@@ -1,0 +1,261 @@
+<div class="dashboard-page">
+  <!-- Top Filter & Action Header -->
+  <div class="dashboard-toolbar">
+    <div class="toolbar-title">
+      <h2>لوحة التحليلات والمؤشرات 📊</h2>
+      <span class="subtitle">تتبع مباشر للمبيعات، المغاسل، أداء المناديب واستبيانات العملاء</span>
+    </div>
+
+    <div class="toolbar-actions">
+      <!-- Period Radio Segmented -->
+      <nz-radio-group [(ngModel)]="selectedPeriod" (ngModelChange)="onPeriodChange()" nzBorderSize="default">
+        <label nz-radio-button nzValue="today">اليوم</label>
+        <label nz-radio-button nzValue="week">هذا الأسبوع</label>
+        <label nz-radio-button nzValue="month">هذا الشهر</label>
+        <label nz-radio-button nzValue="year">هذا العام</label>
+      </nz-radio-group>
+
+      <!-- Laundry Filter Select -->
+      <nz-select [(ngModel)]="selectedLaundry" nzPlaceHolder="اختر المغسلة" style="width: 180px;">
+        <nz-option nzValue="all" nzLabel="جميع المغاسل"></nz-option>
+        <nz-option nzValue="1" nzLabel="مغسلة الصفا"></nz-option>
+        <nz-option nzValue="2" nzLabel="مغسلة النجوم"></nz-option>
+        <nz-option nzValue="3" nzLabel="مغسلة الأمل"></nz-option>
+      </nz-select>
+
+      <button nz-button nzType="primary" class="export-btn">
+        <i nz-icon nzType="download"></i> تصدير التقرير
+      </button>
+    </div>
+  </div>
+
+  <!-- Primary Metric KPI Cards Grid -->
+  <div nz-row [nzGutter]="[16, 16]" class="kpi-grid">
+    <div nz-col nzXs="24" nzSm="12" nzLg="6">
+      <div class="kpi-card gradient-blue">
+        <div class="kpi-icon-wrapper">
+          <i nz-icon nzType="dollar-circle" nzTheme="fill"></i>
+        </div>
+        <div class="kpi-details">
+          <span class="kpi-label">إجمالي الإيرادات</span>
+          <h3 class="kpi-value">48,500 <small>ر.س</small></h3>
+          <div class="kpi-badge positive">
+            <i nz-icon nzType="arrow-up"></i> +18.4% <span>مقارنة بالفترة السابقة</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="12" nzLg="6">
+      <div class="kpi-card gradient-green">
+        <div class="kpi-icon-wrapper">
+          <i nz-icon nzType="check-circle" nzTheme="fill"></i>
+        </div>
+        <div class="kpi-details">
+          <span class="kpi-label">الطلبات المكتملة</span>
+          <h3 class="kpi-value">1,840 <small>طلب</small></h3>
+          <div class="kpi-badge positive">
+            <i nz-icon nzType="arrow-up"></i> +12.1% <span>معدل إنجاز عالي</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="12" nzLg="6">
+      <div class="kpi-card gradient-purple">
+        <div class="kpi-icon-wrapper">
+          <i nz-icon nzType="shop" nzTheme="fill"></i>
+        </div>
+        <div class="kpi-details">
+          <span class="kpi-label">المغاسل النشطة</span>
+          <h3 class="kpi-value">28 <small>مغسلة</small></h3>
+          <div class="kpi-badge neutral">
+            <i nz-icon nzType="check"></i> 100% <span>تشغيل مستمر</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="12" nzLg="6">
+      <div class="kpi-card gradient-orange">
+        <div class="kpi-icon-wrapper">
+          <i nz-icon nzType="star" nzTheme="fill"></i>
+        </div>
+        <div class="kpi-details">
+          <span class="kpi-label">معدل رضى العملاء</span>
+          <h3 class="kpi-value">4.85 <small>/ 5.0</small></h3>
+          <div class="kpi-badge positive">
+            <i nz-icon nzType="smile"></i> 96% <span>تقييمات ممتازة</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 1 Charts: Revenue Growth Area Chart & Orders Donut Chart -->
+  <div nz-row [nzGutter]="[20, 20]" class="charts-row">
+    <div nz-col nzXs="24" nzLg="16">
+      <nz-card nzTitle="نمو المبيعات وحجم الطلبات" class="chart-card">
+        <apx-chart
+          #areaChart
+          [series]="areaChartOptions.series"
+          [chart]="areaChartOptions.chart"
+          [xaxis]="areaChartOptions.xaxis"
+          [stroke]="areaChartOptions.stroke"
+          [colors]="areaChartOptions.colors"
+          [dataLabels]="areaChartOptions.dataLabels"
+          [fill]="areaChartOptions.fill"
+          [yaxis]="areaChartOptions.yaxis"
+          [legend]="areaChartOptions.legend"
+          [tooltip]="areaChartOptions.tooltip"
+        ></apx-chart>
+      </nz-card>
+    </div>
+
+    <div nz-col nzXs="24" nzLg="8">
+      <nz-card nzTitle="توزيع حالات الطلبات الحالية" class="chart-card">
+        <apx-chart
+          #donutChart
+          [series]="donutChartOptions.series"
+          [chart]="donutChartOptions.chart"
+          [labels]="donutChartOptions.labels"
+          [colors]="donutChartOptions.colors"
+          [legend]="donutChartOptions.legend"
+          [dataLabels]="donutChartOptions.dataLabels"
+          [responsive]="donutChartOptions.responsive"
+        ></apx-chart>
+      </nz-card>
+    </div>
+  </div>
+
+  <!-- Row 2: Customer Satisfaction Surveys & Recent Reviews Section -->
+  <div nz-row [nzGutter]="[20, 20]" class="surveys-row">
+    <!-- Customer Surveys Breakdown -->
+    <div nz-col nzXs="24" nzLg="14">
+      <nz-card nzTitle="استبيانات ومؤشرات الجودة والرضى" [nzExtra]="surveyExtra" class="section-card">
+        <div class="survey-metrics-list">
+          <div class="survey-item" *ngFor="let item of surveysData">
+            <div class="survey-header">
+              <div class="survey-title-wrap">
+                <strong>{{ item.title }}</strong>
+                <span class="survey-count">({{ item.count }} إجابة)</span>
+              </div>
+              <div class="survey-rating-badge">
+                <i nz-icon nzType="star" nzTheme="fill" class="star-icon"></i>
+                <span>{{ item.rating }} / 5.0</span>
+              </div>
+            </div>
+            <nz-progress
+              [nzPercent]="item.score"
+              [nzStrokeColor]="{ '0%': '#108ee9', '100%': '#87d068' }"
+              [nzFormat]="percentFormat"
+            ></nz-progress>
+          </div>
+        </div>
+      </nz-card>
+      <ng-template #surveyExtra>
+        <span class="sub-text">مبني على 420 استبيان موثق</span>
+      </ng-template>
+      <ng-template #percentFormat let-percent>{{ percent }}% ممتاز</ng-template>
+    </div>
+
+    <!-- Recent Customer Feedback -->
+    <div nz-col nzXs="24" nzLg="10">
+      <nz-card nzTitle="آخر آراء وتقييمات العملاء" class="section-card">
+        <div class="reviews-list">
+          <div class="review-card" *ngFor="let review of customerReviews">
+            <div class="review-header">
+              <div class="user-info">
+                <nz-avatar nzIcon="user" class="avatar"></nz-avatar>
+                <div>
+                  <h4 class="user-name">{{ review.name }}</h4>
+                  <span class="laundry-tag">{{ review.laundry }}</span>
+                </div>
+              </div>
+              <span class="review-time">{{ review.time }}</span>
+            </div>
+            <div class="review-stars">
+              <nz-rate [ngModel]="review.rating" nzDisabled></nz-rate>
+            </div>
+            <p class="review-comment">"{{ review.comment }}"</p>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+
+  <!-- Row 3: Top Laundries & Fleet Drivers Status -->
+  <div nz-row [nzGutter]="[20, 20]" class="tables-row">
+    <!-- Top Performing Laundries -->
+    <div nz-col nzXs="24" nzLg="15">
+      <nz-card nzTitle="أعلى المغاسل أداءً ومبيعات" [nzExtra]="topLaundriesExtra" class="section-card">
+        <nz-table #topLaundriesTable [nzData]="topLaundries" [nzShowPagination]="false">
+          <thead>
+            <tr>
+              <th>المغسلة</th>
+              <th>الفرع / الموقع</th>
+              <th>عدد الطلبات</th>
+              <th>الإيرادات</th>
+              <th>التقييم</th>
+              <th>الحالة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of topLaundriesTable.data">
+              <td><strong>{{ item.name }}</strong></td>
+              <td>{{ item.city }}</td>
+              <td>{{ item.orders }} طلب</td>
+              <td><strong>{{ item.revenue | number }} ر.س</strong></td>
+              <td>
+                <span class="table-rating">⭐ {{ item.rating }}</span>
+              </td>
+              <td>
+                <nz-tag [nzColor]="getStatusColor(item.status)">{{ item.status }}</nz-tag>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+      <ng-template #topLaundriesExtra>
+        <a routerLink="/laundries">عرض كافة المغاسل</a>
+      </ng-template>
+    </div>
+
+    <!-- Active Fleet Drivers Tracker -->
+    <div nz-col nzXs="24" nzLg="9">
+      <nz-card nzTitle="أسطول المناديب والتوصيل المباشر" class="section-card">
+        <div class="drivers-fleet-summary">
+          <div class="driver-stat-box available">
+            <span class="stat-num">{{ driversStatus.available }}</span>
+            <span class="stat-lbl">متاح للتوصيل</span>
+          </div>
+          <div class="driver-stat-box busy">
+            <span class="stat-num">{{ driversStatus.delivering }}</span>
+            <span class="stat-lbl">في مهمة توصيل</span>
+          </div>
+          <div class="driver-stat-box offline">
+            <span class="stat-num">{{ driversStatus.offline }}</span>
+            <span class="stat-lbl">غير متاح</span>
+          </div>
+        </div>
+
+        <div class="fleet-progress-section">
+          <div class="progress-title">
+            <span>نسبة التغطية الميدانية للأسطول</span>
+            <strong>88% متصل</strong>
+          </div>
+          <nz-progress [nzPercent]="88" nzStatus="active"></nz-progress>
+        </div>
+
+        <div class="quick-action-box">
+          <i nz-icon nzType="car" class="car-icon"></i>
+          <div>
+            <strong>25 مندوب مسجل</strong>
+            <p>جميع المناديب مجهّزون بتطبيق التوصيل المباشر</p>
+          </div>
+          <button nz-button nzType="default" nzSize="small" routerLink="/drivers">إدارة</button>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+</div>

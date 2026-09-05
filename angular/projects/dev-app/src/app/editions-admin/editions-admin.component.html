@@ -1,0 +1,327 @@
+<div class="editions-admin-container" dir="rtl">
+  <!-- Page Header -->
+  <nz-page-header class="page-header-card" [nzGhost]="false">
+    <!-- Breadcrumb -->
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item>
+        <a routerLink="/dashboard"><i nz-icon nzType="home"></i> الرئيسية</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>إدارة المغاسل والخدمات</nz-breadcrumb-item>
+      <nz-breadcrumb-item>إدارة الباقات والاشتراكات</nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <!-- Title & Subtitle -->
+    <nz-page-header-title>
+      <div class="header-title-wrapper">
+        <div class="header-icon-box">
+          <i nz-icon nzType="gift" nzTheme="outline"></i>
+        </div>
+        <div>
+          <h2 class="main-title">إدارة الباقات والاشتراكات (Editions Management)</h2>
+          <span class="sub-title">إعداد وتخصيص خطط الاشتراك السحابية لمغاسل المنظومة والتحكم بالأسعار</span>
+        </div>
+      </div>
+    </nz-page-header-title>
+
+    <!-- Extra Action Buttons -->
+    <nz-page-header-extra>
+      <div class="header-actions">
+        <button nz-button nzType="default" (click)="loadEditions()" [nzLoading]="loading">
+          <i nz-icon nzType="reload"></i>
+          <span>تحديث</span>
+        </button>
+        <button nz-button nzType="primary" class="add-edition-btn" (click)="openCreateModal()">
+          <i nz-icon nzType="plus-circle" nzTheme="outline"></i>
+          <span>إضافة باقة جديدة</span>
+        </button>
+      </div>
+    </nz-page-header-extra>
+  </nz-page-header>
+
+  <!-- Overview Stats Row -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon-wrapper edition-icon">
+        <i nz-icon nzType="appstore"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">إجمالي الباقات المعرفة</span>
+        <h3 class="stat-number">{{ totalCount }}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper pro-icon">
+        <i nz-icon nzType="crown"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">الباقة الأكثر اشتراكاً</span>
+        <h3 class="stat-number pro-text">Professional</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper tenants-icon">
+        <i nz-icon nzType="shop"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">إجمالي الاشتراكات النشطة</span>
+        <h3 class="stat-number">55 مغسلة</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table Card & Filter Bar -->
+  <nz-card class="content-table-card" [nzBordered]="false">
+    <!-- Search & Filter Controls -->
+    <div class="table-toolbar">
+      <div class="search-input-group">
+        <nz-input-group [nzPrefix]="searchPrefix" [nzSuffix]="searchSuffix" class="custom-search-input">
+          <input
+            type="text"
+            nz-input
+            placeholder="بحث باسم الباقة أو الخطة..."
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="onSearch()"
+          />
+        </nz-input-group>
+        <ng-template #searchPrefix>
+          <i nz-icon nzType="search" class="search-icon"></i>
+        </ng-template>
+        <ng-template #searchSuffix>
+          <i
+            nz-icon
+            nzType="close-circle"
+            nzTheme="fill"
+            class="clear-icon"
+            *ngIf="searchTerm"
+            (click)="searchTerm = ''; onSearch()"
+          ></i>
+        </ng-template>
+        <button nz-button nzType="primary" (click)="onSearch()" class="search-btn">
+          بحث
+        </button>
+      </div>
+
+      <div class="toolbar-info">
+        <span class="results-count">عدد الباقات: <strong>{{ totalCount }}</strong> باقة</span>
+      </div>
+    </div>
+
+    <!-- Editions Table -->
+    <nz-table
+      #editionsTable
+      [nzData]="editions"
+      [nzLoading]="loading"
+      [nzFrontPagination]="false"
+      [nzTotal]="totalCount"
+      [nzPageIndex]="pageIndex"
+      [nzPageSize]="pageSize"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[5, 10, 20]"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+      [nzScroll]="{ x: '800px' }"
+      class="custom-editions-table"
+    >
+      <thead>
+        <tr>
+          <th nzWidth="60px" class="text-center">#</th>
+          <th nzWidth="260px">اسم الباقة (Edition Name)</th>
+          <th nzWidth="150px" class="text-center">نوع الخطة</th>
+          <th nzWidth="180px">التسعير والاشتراك</th>
+          <th nzWidth="130px" class="text-center">المغاسل المشتركة</th>
+          <th nzWidth="120px" class="text-center">الحالة</th>
+          <th nzWidth="160px" class="text-center">الإجراءات</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let edition of editionsTable.data; let i = index">
+          <td class="text-center row-index">{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+          <td>
+            <div class="edition-identity">
+              <div
+                class="edition-avatar"
+                [class.pro-avatar]="normalizePlanType(edition.planType) === 'pro'"
+                [class.ent-avatar]="normalizePlanType(edition.planType) === 'enterprise'"
+              >
+                <i nz-icon nzType="crown" *ngIf="normalizePlanType(edition.planType) === 'enterprise'"></i>
+                <i nz-icon nzType="thunderbolt" *ngIf="normalizePlanType(edition.planType) === 'pro'"></i>
+                <i
+                  nz-icon
+                  nzType="gift"
+                  *ngIf="normalizePlanType(edition.planType) !== 'pro' && normalizePlanType(edition.planType) !== 'enterprise'"
+                ></i>
+              </div>
+              <div class="edition-details">
+                <span class="edition-name">{{ edition.displayName }}</span>
+                <span class="edition-sub">خطة سحابية متكاملة</span>
+              </div>
+            </div>
+          </td>
+          <td class="text-center">
+            <nz-tag [nzColor]="getPlanTypeColor(edition.planType)" class="plan-tag">
+              {{ getPlanTypeName(edition.planType) }}
+            </nz-tag>
+          </td>
+          <td>
+            <div class="price-box" *ngIf="!edition.isFree && edition.price">
+              <span class="monthly-price"><strong>{{ edition.price }}</strong> ر.س / شهرياً</span>
+              <span class="annual-price" *ngIf="edition.annualPrice">{{ edition.annualPrice }} ر.س / سنوياً</span>
+            </div>
+            <div class="free-price-box" *ngIf="edition.isFree || !edition.price">
+              <nz-tag nzColor="green">مجانية بالكامل (Free)</nz-tag>
+            </div>
+          </td>
+          <td class="text-center">
+            <nz-badge
+              [nzCount]="edition.tenantCount || 0"
+              [nzStyle]="{ backgroundColor: '#0284c7' }"
+              class="tenants-badge"
+            ></nz-badge>
+          </td>
+          <td class="text-center">
+            <nz-tag nzColor="success" class="status-badge">
+              <i nz-icon nzType="check-circle"></i>
+              <span>مفعلة</span>
+            </nz-tag>
+          </td>
+          <td class="text-center">
+            <div class="actions-wrapper">
+              <!-- Edit Button -->
+              <button
+                nz-button
+                nzType="default"
+                nzSize="small"
+                class="action-btn edit-btn"
+                (click)="openEditModal(edition)"
+                nz-tooltip
+                nzTooltipTitle="تعديل بيانات الباقة والأسعار"
+              >
+                <i nz-icon nzType="edit"></i>
+                <span>تعديل</span>
+              </button>
+
+              <!-- Delete Button with Popconfirm -->
+              <button
+                nz-button
+                nzType="default"
+                nzDanger
+                nzSize="small"
+                class="action-btn delete-btn"
+                nz-popconfirm
+                nzPopconfirmTitle="هل أنت متأكد من حذف هذه الباقة؟"
+                nzOkText="نعم، حذف"
+                nzCancelText="إلغاء"
+                nzOkDanger="true"
+                (nzOnConfirm)="deleteEdition(edition)"
+                nz-tooltip
+                nzTooltipTitle="حذف الباقة"
+              >
+                <i nz-icon nzType="delete"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+
+  <!-- Create / Edit Edition Modal -->
+  <nz-modal
+    [(nzVisible)]="isModalVisible"
+    [nzTitle]="modalTitleTemplate"
+    (nzOnCancel)="handleModalCancel()"
+    (nzOnOk)="handleFormSubmit()"
+    [nzOkLoading]="isSubmitting"
+    [nzOkText]="isEditMode ? 'حفظ التعديلات' : 'إنشاء الباقة'"
+    [nzCancelText]="'إلغاء'"
+    [nzWidth]="540"
+    [nzMaskClosable]="false"
+    class="custom-edition-modal"
+  >
+    <ng-template #modalTitleTemplate>
+      <div class="modal-header-content">
+        <i nz-icon [nzType]="isEditMode ? 'edit' : 'plus-circle'" class="modal-title-icon"></i>
+        <span>{{ isEditMode ? 'تعديل بيانات الباقة والاشتراك' : 'إضافة باقة اشتراك جديدة' }}</span>
+      </div>
+    </ng-template>
+
+    <ng-container *nzModalContent>
+      <form nz-form [formGroup]="editionForm" nzLayout="vertical" class="edition-form">
+        <!-- Edition Display Name -->
+        <nz-form-item>
+          <nz-form-label nzRequired nzFor="displayName">اسم الباقة (Edition Name)</nz-form-label>
+          <nz-form-control [nzErrorTip]="nameErrorTpl">
+            <nz-input-group [nzPrefix]="giftPrefix">
+              <input
+                nz-input
+                id="displayName"
+                formControlName="displayName"
+                placeholder="مثال: الباقة الاحترافية الشاملة - Pro Plus"
+              />
+            </nz-input-group>
+            <ng-template #giftPrefix><i nz-icon nzType="gift"></i></ng-template>
+            <ng-template #nameErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('required')">اسم الباقة مطلوب ولا يمكن تركه فارغاً</ng-container>
+              <ng-container *ngIf="control.hasError('maxlength')">الحد الأقصى للاسم هو 128 حرفاً</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Plan Type Selection -->
+        <nz-form-item>
+          <nz-form-label nzRequired nzFor="planType">فئة ونوع الخطة</nz-form-label>
+          <nz-form-control>
+            <nz-select id="planType" formControlName="planType" nzPlaceHolder="اختر نوع الخطة">
+              <nz-option nzValue="Basic" nzLabel="الأساسية (Starter / Basic)"></nz-option>
+              <nz-option nzValue="Pro" nzLabel="المتقدمة (Professional / Pro)"></nz-option>
+              <nz-option nzValue="Enterprise" nzLabel="المؤسسات وسلاسل الفروع (Enterprise)"></nz-option>
+              <nz-option nzValue="Trial" nzLabel="التجريبية (Free Trial)"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Free Edition Switch -->
+        <nz-form-item class="switch-form-item">
+          <div class="switch-row">
+            <div>
+              <span class="switch-title">باقة مجانية بالكامل؟</span>
+              <span class="switch-subtitle">تفعيل هذه الخاصية سيجعل قيمة الاشتراك 0 ر.س للمغاسل</span>
+            </div>
+            <nz-switch formControlName="isFree"></nz-switch>
+          </div>
+        </nz-form-item>
+
+        <!-- Pricing Row (When not free) -->
+        <div class="pricing-inputs-grid" *ngIf="!editionForm.get('isFree')?.value">
+          <nz-form-item>
+            <nz-form-label nzRequired nzFor="price">السعر الشهري (ر.س)</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                id="price"
+                formControlName="price"
+                [nzMin]="0"
+                [nzStep]="10"
+                class="price-number-input"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label nzFor="annualPrice">السعر السنوي (ر.س)</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                id="annualPrice"
+                formControlName="annualPrice"
+                [nzMin]="0"
+                [nzStep]="50"
+                class="price-number-input"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </form>
+    </ng-container>
+  </nz-modal>
+</div>

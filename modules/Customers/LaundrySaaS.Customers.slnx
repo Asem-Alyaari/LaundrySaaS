@@ -1,0 +1,36 @@
+<Solution>
+  <Folder Name="/host/">
+    <Project Path="host/LaundrySaaS.Customers.AuthServer/LaundrySaaS.Customers.AuthServer.csproj" />
+    
+    
+    
+    <Project Path="host/LaundrySaaS.Customers.Host.Shared/LaundrySaaS.Customers.Host.Shared.csproj" />
+    <Project Path="host/LaundrySaaS.Customers.HttpApi.Host/LaundrySaaS.Customers.HttpApi.Host.csproj" />
+    
+    
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/LaundrySaaS.Customers.Application.Contracts/LaundrySaaS.Customers.Application.Contracts.csproj" />
+    <Project Path="src/LaundrySaaS.Customers.Application/LaundrySaaS.Customers.Application.csproj" />
+    
+    <Project Path="src/LaundrySaaS.Customers.Blazor.WebAssembly.Bundling/LaundrySaaS.Customers.Blazor.WebAssembly.Bundling.csproj" />
+    
+    
+    <Project Path="src/LaundrySaaS.Customers.Domain.Shared/LaundrySaaS.Customers.Domain.Shared.csproj" />
+    <Project Path="src/LaundrySaaS.Customers.Domain/LaundrySaaS.Customers.Domain.csproj" />
+    <Project Path="src/LaundrySaaS.Customers.EntityFrameworkCore/LaundrySaaS.Customers.EntityFrameworkCore.csproj" />
+    <Project Path="src/LaundrySaaS.Customers.HttpApi.Client/LaundrySaaS.Customers.HttpApi.Client.csproj" />
+    <Project Path="src/LaundrySaaS.Customers.HttpApi/LaundrySaaS.Customers.HttpApi.csproj" />
+    <Project Path="src/LaundrySaaS.Customers.Installer/LaundrySaaS.Customers.Installer.csproj" />
+    <Project Path="src/LaundrySaaS.Customers.MongoDB/LaundrySaaS.Customers.MongoDB.csproj" />
+    
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/LaundrySaaS.Customers.Application.Tests/LaundrySaaS.Customers.Application.Tests.csproj" />
+    <Project Path="test/LaundrySaaS.Customers.Domain.Tests/LaundrySaaS.Customers.Domain.Tests.csproj" />
+    <Project Path="test/LaundrySaaS.Customers.EntityFrameworkCore.Tests/LaundrySaaS.Customers.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/LaundrySaaS.Customers.HttpApi.Client.ConsoleTestApp/LaundrySaaS.Customers.HttpApi.Client.ConsoleTestApp.csproj" />
+    <Project Path="test/LaundrySaaS.Customers.MongoDB.Tests/LaundrySaaS.Customers.MongoDB.Tests.csproj" />
+    <Project Path="test/LaundrySaaS.Customers.TestBase/LaundrySaaS.Customers.TestBase.csproj" />
+  </Folder>
+</Solution>

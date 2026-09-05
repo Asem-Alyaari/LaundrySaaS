@@ -1,0 +1,8 @@
+namespace LaundrySaaS.Subscriptions;
+
+public enum SubscriptionStatus
+{
+    Active = 1,
+    Expired = 2,
+    Suspended = 3
+}

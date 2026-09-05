@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.prod.json",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "paths": {
+      "@laundry-saa-s": [
+        "./projects/laundry-saa-s/src/public-api.ts"
+      ],
+      "@laundry-saa-s/config": [
+        "./projects/laundry-saa-s/config/src/public-api.ts"
+      ],
+      "@proxy": ["./projects/laundry-saa-s/src/lib/proxy/index.ts"],
+      "@proxy/*": ["./projects/laundry-saa-s/src/lib/proxy/*"]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>LaundrySaaS.Drivers</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="10.6.0" />
+    <ProjectReference Include="..\LaundrySaaS.Drivers.Application.Contracts\LaundrySaaS.Drivers.Application.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

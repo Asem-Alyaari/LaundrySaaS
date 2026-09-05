@@ -1,0 +1,611 @@
+<div class="laundries-admin-container" dir="rtl">
+  <!-- Modern Sleek Page Header -->
+  <div class="hero-page-header">
+    <div class="header-left-col">
+      <nz-breadcrumb class="custom-breadcrumb">
+        <nz-breadcrumb-item>
+          <a routerLink="/dashboard"><i nz-icon nzType="home"></i> الرئيسية</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>إدارة المنظومة</nz-breadcrumb-item>
+        <nz-breadcrumb-item>إدارة المغاسل والمستأجرين</nz-breadcrumb-item>
+      </nz-breadcrumb>
+
+      <div class="header-main-info">
+        <div class="header-badge-icon">
+          <i nz-icon nzType="shop"></i>
+        </div>
+        <div>
+          <div class="title-with-badge">
+            <h1 class="page-title">إدارة المغاسل والمستأجرين (Tenants Management)</h1>
+            <span class="total-counter-chip">{{ totalCount }} مغسلة</span>
+          </div>
+          <p class="page-description">
+            إدارة حسابات المغاسل المركزية، تخصيص باقات الاشتراكات السحابية، والتحكم بالصلاحيات وحالات التفعيل
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button nz-button nzType="default" class="refresh-btn" (click)="loadTenants()" [nzLoading]="loading">
+        <i nz-icon nzType="reload"></i>
+        <span>تحديث</span>
+      </button>
+      <button nz-button nzType="primary" class="create-laundry-btn" (click)="openCreateModal()">
+        <i nz-icon nzType="plus"></i>
+        <span>إضافة مغسلة جديدة</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI Stats Grid -->
+  <div class="kpi-grid">
+    <!-- Total Laundries -->
+    <div class="kpi-card total-kpi">
+      <div class="kpi-header">
+        <span class="kpi-title">إجمالي المغاسل</span>
+        <div class="kpi-icon-circle blue-glow">
+          <i nz-icon nzType="cluster"></i>
+        </div>
+      </div>
+      <div class="kpi-body">
+        <h2 class="kpi-value">{{ totalCount }}</h2>
+        <span class="kpi-hint">مغاسل مسجلة في قاعدة البيانات</span>
+      </div>
+    </div>
+
+    <!-- Active Laundries -->
+    <div class="kpi-card active-kpi">
+      <div class="kpi-header">
+        <span class="kpi-title">المغاسل المفعلة</span>
+        <div class="kpi-icon-circle green-glow">
+          <i nz-icon nzType="check-circle"></i>
+        </div>
+      </div>
+      <div class="kpi-body">
+        <h2 class="kpi-value green-text">{{ activeCount }}</h2>
+        <div class="status-indicator-inline">
+          <span class="pulse-dot green"></span>
+          <span class="kpi-hint">تستقبل الطلبات والعملاء حالياً</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suspended Laundries -->
+    <div class="kpi-card suspended-kpi">
+      <div class="kpi-header">
+        <span class="kpi-title">المتوقفة مؤقتاً</span>
+        <div class="kpi-icon-circle red-glow">
+          <i nz-icon nzType="pause-circle"></i>
+        </div>
+      </div>
+      <div class="kpi-body">
+        <h2 class="kpi-value red-text">{{ suspendedCount }}</h2>
+        <div class="status-indicator-inline">
+          <span class="pulse-dot red" *ngIf="suspendedCount > 0"></span>
+          <span class="kpi-hint">{{ suspendedCount > 0 ? 'حسابات مجمدة أو تحت المراجعة' : 'لا توجد مغاسل متوقفة' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Available Plans -->
+    <div class="kpi-card plans-kpi" routerLink="/editions">
+      <div class="kpi-header">
+        <span class="kpi-title">باقات الاشتراكات</span>
+        <div class="kpi-icon-circle purple-glow">
+          <i nz-icon nzType="crown"></i>
+        </div>
+      </div>
+      <div class="kpi-body">
+        <h2 class="kpi-value purple-text">{{ availableEditions.length }} باقات</h2>
+        <span class="kpi-hint link-hint">
+          <span>إدارة الباقات والأسعار</span>
+          <i nz-icon nzType="arrow-left"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Management Panel -->
+  <div class="management-panel">
+    <!-- Filter Pills & Search Bar Controls -->
+    <div class="panel-header-controls">
+      <!-- Filter Status Pills -->
+      <div class="filter-pills-bar">
+        <button
+          type="button"
+          class="filter-pill"
+          [class.active]="filterStatus === 'all'"
+          (click)="onFilterStatusChange('all')"
+        >
+          <span>جميع المغاسل</span>
+          <span class="pill-badge">{{ totalCount }}</span>
+        </button>
+
+        <button
+          type="button"
+          class="filter-pill"
+          [class.active]="filterStatus === 'active'"
+          (click)="onFilterStatusChange('active')"
+        >
+          <span class="pulse-dot green"></span>
+          <span>النشطة والمفعلة</span>
+          <span class="pill-badge green-badge">{{ activeCount }}</span>
+        </button>
+
+        <button
+          type="button"
+          class="filter-pill"
+          [class.active]="filterStatus === 'suspended'"
+          (click)="onFilterStatusChange('suspended')"
+        >
+          <span class="pulse-dot red" *ngIf="suspendedCount > 0"></span>
+          <span>المتوقفة مؤقتاً</span>
+          <span class="pill-badge red-badge">{{ suspendedCount }}</span>
+        </button>
+      </div>
+
+      <!-- Search Input -->
+      <div class="search-box-wrapper">
+        <nz-input-group [nzPrefix]="searchPrefix" [nzSuffix]="searchSuffix" class="modern-search-input">
+          <input
+            type="text"
+            nz-input
+            placeholder="بحث باسم المغسلة أو المعرف الفريد..."
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="onSearch()"
+          />
+        </nz-input-group>
+        <ng-template #searchPrefix>
+          <i nz-icon nzType="search" class="search-icon"></i>
+        </ng-template>
+        <ng-template #searchSuffix>
+          <i
+            nz-icon
+            nzType="close-circle"
+            nzTheme="fill"
+            class="clear-icon"
+            *ngIf="searchTerm"
+            (click)="searchTerm = ''; onSearch()"
+          ></i>
+        </ng-template>
+        <button nz-button nzType="primary" class="search-submit-btn" (click)="onSearch()">
+          بحث
+        </button>
+      </div>
+    </div>
+
+    <!-- Redesigned High-End Table -->
+    <nz-table
+      #tenantsTable
+      [nzData]="filteredTenants"
+      [nzLoading]="loading"
+      [nzFrontPagination]="false"
+      [nzTotal]="totalCount"
+      [nzPageIndex]="pageIndex"
+      [nzPageSize]="pageSize"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[5, 10, 20, 50]"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+      [nzScroll]="{ x: '1150px' }"
+      class="luxurious-table"
+    >
+      <thead>
+        <tr>
+          <th nzWidth="50px" class="text-center">#</th>
+          <th nzWidth="270px">بيانات المغسلة والمستأجر</th>
+          <th nzWidth="190px">باقة الاشتراك السحابية</th>
+          <th nzWidth="230px">قاعدة البيانات / Connection String</th>
+          <th nzWidth="140px" class="text-center">الحالة التشغيلية</th>
+          <th nzWidth="120px" class="text-center">الكتالوج</th>
+          <th nzWidth="130px" class="text-center">الإجراءات</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tenant of tenantsTable.data; let i = index" [class.row-suspended]="tenant.isActive === false">
+          <td class="text-center index-col">{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+
+          <!-- Laundry Profile -->
+          <td>
+            <div class="laundry-profile-cell">
+              <div class="laundry-avatar" [style.background]="getAvatarGradient(tenant.id)">
+                <span>{{ getLaundryInitials(tenant.name) }}</span>
+              </div>
+              <div class="laundry-text-info">
+                <span class="laundry-title">{{ tenant.name }}</span>
+                <div class="id-copy-row">
+                  <span class="id-prefix">معرف:</span>
+                  <code class="short-id-code" nz-tooltip [nzTooltipTitle]="tenant.id">{{ tenant.id ? (tenant.id | slice:0:13) + '...' : '---' }}</code>
+                  <button
+                    nz-button
+                    nzType="text"
+                    nzSize="small"
+                    class="id-copy-btn"
+                    (click)="copyToClipboard(tenant.id)"
+                    nz-tooltip
+                    nzTooltipTitle="نسخ المعرف بالكامل"
+                  >
+                    <i nz-icon nzType="copy"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </td>
+
+          <!-- Subscription Plan -->
+          <td>
+            <div class="plan-cell">
+              <div
+                class="plan-chip"
+                [class]="'plan-' + getPlanBadgeColor(tenant.planType)"
+                (click)="openChangePlanModal(tenant)"
+                nz-tooltip
+                nzTooltipTitle="انقر لتعديل أو ترقية باقة الاشتراك"
+              >
+                <i nz-icon nzType="crown" *ngIf="tenant.planType === 'Enterprise' || tenant.planType === '3'"></i>
+                <i nz-icon nzType="thunderbolt" *ngIf="tenant.planType === 'Pro' || tenant.planType === '2'"></i>
+                <i nz-icon nzType="gift" *ngIf="tenant.planType !== 'Enterprise' && tenant.planType !== '3' && tenant.planType !== 'Pro' && tenant.planType !== '2'"></i>
+                <span class="plan-name">{{ tenant.editionName || 'الباقة المتقدمة (Pro)' }}</span>
+              </div>
+              <span class="cycle-pill">{{ tenant.subscriptionCycle === 'annual' ? 'اشتراك سنوي' : 'اشتراك شهري' }}</span>
+            </div>
+          </td>
+
+          <!-- Connection String / Database Name Column -->
+          <td>
+            <div
+              class="db-cell"
+              (click)="openConnectionStringModal(tenant)"
+              nz-tooltip
+              [nzTooltipTitle]="tenant.isDedicatedDb ? ('سلسلة اتصال مخصصة: ' + tenant.connectionString + ' (انقر للتعديل)') : 'تستخدم قاعدة البيانات الموحدة للمنظومة (Shared DB) - انقر لتخصيص قاعدة بيانات مستقلة'"
+            >
+              <div *ngIf="tenant.isLoadingDb" class="db-loading-state">
+                <i nz-icon nzType="loading" class="spin-icon"></i>
+                <span>فحص قاعدة البيانات...</span>
+              </div>
+
+              <ng-container *ngIf="!tenant.isLoadingDb">
+                <!-- Dedicated DB Badge -->
+                <div *ngIf="tenant.isDedicatedDb" class="db-badge dedicated-badge">
+                  <div class="db-badge-icon">
+                    <i nz-icon nzType="database" nzTheme="fill"></i>
+                  </div>
+                  <div class="db-badge-info">
+                    <span class="db-name-text">{{ tenant.databaseName }}</span>
+                    <span class="db-tag-pill">مستقلة (Dedicated DB)</span>
+                  </div>
+                  <button nz-button nzType="text" nzSize="small" class="db-edit-btn">
+                    <i nz-icon nzType="edit"></i>
+                  </button>
+                </div>
+
+                <!-- Shared DB Badge -->
+                <div *ngIf="!tenant.isDedicatedDb" class="db-badge shared-badge">
+                  <div class="db-badge-icon">
+                    <i nz-icon nzType="hdd" nzTheme="outline"></i>
+                  </div>
+                  <div class="db-badge-info">
+                    <span class="db-name-text">قاعدة بيانات موحدة</span>
+                    <span class="db-tag-pill">مشتركة (Shared DB)</span>
+                  </div>
+                  <button nz-button nzType="text" nzSize="small" class="db-edit-btn">
+                    <i nz-icon nzType="plus-circle"></i>
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </td>
+
+          <!-- Status -->
+          <td class="text-center">
+            <div class="status-pill" [class.active-status]="tenant.isActive !== false" [class.suspended-status]="tenant.isActive === false">
+              <span class="pulse-dot" [class.green]="tenant.isActive !== false" [class.red]="tenant.isActive === false"></span>
+              <span>{{ tenant.isActive !== false ? 'نشطة ومفعلة' : 'متوقفة مؤقتاً' }}</span>
+            </div>
+          </td>
+
+          <!-- Service Catalog Link -->
+          <td class="text-center">
+            <a
+              nz-button
+              nzType="default"
+              class="catalog-link-btn"
+              [routerLink]="['/services']"
+              [queryParams]="{ laundryId: tenant.id }"
+              nz-tooltip
+              nzTooltipTitle="إدارة الخدمات والأسعار وقوائم الغسيل لهذه المغسلة"
+            >
+              <i nz-icon nzType="tags"></i>
+              <span>الكتالوج</span>
+            </a>
+          </td>
+
+          <!-- Actions -->
+          <td class="text-center">
+            <div class="table-actions-group">
+              <!-- Edit Button -->
+              <button
+                nz-button
+                nzType="default"
+                nzSize="small"
+                class="btn-action edit"
+                (click)="openEditModal(tenant)"
+                nz-tooltip
+                nzTooltipTitle="تعديل اسم وبيانات المغسلة"
+              >
+                <i nz-icon nzType="edit"></i>
+              </button>
+
+              <!-- Quick Suspend / Activate Toggle -->
+              <button
+                *ngIf="tenant.isActive !== false"
+                nz-button
+                nzType="default"
+                nzDanger
+                nzSize="small"
+                class="btn-action suspend"
+                nz-popconfirm
+                nzPopconfirmTitle="هل أنت متأكد من إيقاف وتجميد حساب هذه المغسلة مؤقتاً؟"
+                nzOkText="نعم، إيقاف"
+                nzCancelText="إلغاء"
+                nzOkDanger="true"
+                (nzOnConfirm)="toggleTenantStatus(tenant, false)"
+                nz-tooltip
+                nzTooltipTitle="إيقاف مؤقت"
+              >
+                <i nz-icon nzType="pause"></i>
+              </button>
+
+              <button
+                *ngIf="tenant.isActive === false"
+                nz-button
+                nzType="primary"
+                nzSize="small"
+                class="btn-action activate"
+                nz-popconfirm
+                nzPopconfirmTitle="هل أنت متأكد من إعادة تشغيل وتفعيل هذه المغسلة؟"
+                nzOkText="نعم، تفعيل"
+                nzCancelText="إلغاء"
+                (nzOnConfirm)="toggleTenantStatus(tenant, true)"
+                nz-tooltip
+                nzTooltipTitle="إعادة تفعيل"
+              >
+                <i nz-icon nzType="play-circle"></i>
+              </button>
+
+              <!-- More Dropdown Options -->
+              <button
+                nz-button
+                nzType="text"
+                nzSize="small"
+                class="btn-action more"
+                nz-dropdown
+                [nzDropdownMenu]="actionsMenu"
+                nzPlacement="bottomRight"
+              >
+                <i nz-icon nzType="more"></i>
+              </button>
+
+              <!-- Dropdown Menu -->
+              <nz-dropdown-menu #actionsMenu="nzDropdownMenu">
+                <ul nz-menu class="modern-dropdown-menu">
+                  <li nz-menu-item (click)="openChangePlanModal(tenant)">
+                    <i nz-icon nzType="swap" class="menu-icon purple"></i>
+                    <span>ترقية / تغيير باقة الاشتراك</span>
+                  </li>
+                  <li nz-menu-item (click)="openConnectionStringModal(tenant)">
+                    <i nz-icon nzType="database" class="menu-icon blue"></i>
+                    <span>سلسلة اتصال قاعدة البيانات</span>
+                  </li>
+                  <li nz-menu-divider></li>
+                  <li
+                    nz-menu-item
+                    nzDanger
+                    nz-popconfirm
+                    nzPopconfirmTitle="هل أنت متأكد من حذف هذه المغسلة نهائياً مع كافة بياناتها؟"
+                    nzOkText="نعم، حذف نهائي"
+                    nzCancelText="إلغاء"
+                    nzOkDanger="true"
+                    (nzOnConfirm)="deleteTenant(tenant)"
+                  >
+                    <i nz-icon nzType="delete" class="menu-icon red"></i>
+                    <span>حذف المغسلة نهائياً</span>
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+
+  <!-- Create / Edit Laundry Modal with Subscription Selection -->
+  <nz-modal
+    [(nzVisible)]="isModalVisible"
+    [nzTitle]="modalTitleTemplate"
+    (nzOnCancel)="handleModalCancel()"
+    (nzOnOk)="handleFormSubmit()"
+    [nzOkLoading]="isSubmitting"
+    [nzOkText]="isEditMode ? 'حفظ التعديلات' : 'إنشاء المغسلة وتفعيل الباقة'"
+    [nzCancelText]="'إلغاء'"
+    [nzWidth]="580"
+    [nzMaskClosable]="false"
+    class="custom-tenant-modal"
+  >
+    <ng-template #modalTitleTemplate>
+      <div class="modal-header-content">
+        <i nz-icon [nzType]="isEditMode ? 'edit' : 'plus-circle'" class="modal-title-icon"></i>
+        <span>{{ isEditMode ? 'تعديل بيانات المغسلة والاشتراك' : 'إضافة مغسلة جديدة وتعيين باقة الاشتراك' }}</span>
+      </div>
+    </ng-template>
+
+    <ng-container *nzModalContent>
+      <form nz-form [formGroup]="tenantForm" nzLayout="vertical" class="tenant-form">
+        <!-- Tenant / Laundry Name -->
+        <nz-form-item>
+          <nz-form-label nzRequired nzFor="name">اسم المغسلة / الجهة (Tenant Name)</nz-form-label>
+          <nz-form-control [nzErrorTip]="nameErrorTpl">
+            <nz-input-group [nzPrefix]="shopPrefix">
+              <input
+                nz-input
+                id="name"
+                formControlName="name"
+                placeholder="مثال: مغسلة النجوم الذهبية - فرع العليا"
+              />
+            </nz-input-group>
+            <ng-template #shopPrefix><i nz-icon nzType="shop"></i></ng-template>
+            <ng-template #nameErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('required')">اسم المغسلة مطلوب ولا يمكن تركه فارغاً</ng-container>
+              <ng-container *ngIf="control.hasError('maxlength')">الحد الأقصى للاسم هو 64 حرفاً</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Subscription Plan Selection (Edition) -->
+        <nz-form-item>
+          <nz-form-label nzRequired nzFor="editionId">باقة الاشتراك السحابية (Subscription Edition)</nz-form-label>
+          <nz-form-control>
+            <nz-select id="editionId" formControlName="editionId" nzPlaceHolder="اختر باقة الاشتراك للمغسلة">
+              <nz-option
+                *ngFor="let edition of availableEditions"
+                [nzValue]="edition.id"
+                [nzLabel]="edition.displayName + (edition.price ? ' (' + edition.price + ' ر.س/شهرياً)' : ' (مجانية)')"
+              ></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Subscription Cycle Radio -->
+        <nz-form-item>
+          <nz-form-label nzRequired nzFor="subscriptionCycle">دورة الفوترة والاشتراك</nz-form-label>
+          <nz-form-control>
+            <nz-radio-group formControlName="subscriptionCycle" nzButtonStyle="solid">
+              <label nz-radio-button nzValue="monthly">اشتراك شهري (Monthly)</label>
+              <label nz-radio-button nzValue="annual">اشتراك سنوي مع خصم (Annual)</label>
+            </nz-radio-group>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Admin Email (Only on Create) -->
+        <nz-form-item *ngIf="!isEditMode">
+          <nz-form-label nzRequired nzFor="adminEmailAddress">البريد الإلكتروني لمدير المغسلة (Admin Email)</nz-form-label>
+          <nz-form-control [nzErrorTip]="emailErrorTpl">
+            <nz-input-group [nzPrefix]="mailPrefix">
+              <input
+                nz-input
+                id="adminEmailAddress"
+                formControlName="adminEmailAddress"
+                placeholder="admin@laundryname.com"
+                type="email"
+              />
+            </nz-input-group>
+            <ng-template #mailPrefix><i nz-icon nzType="mail"></i></ng-template>
+            <ng-template #emailErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('required')">البريد الإلكتروني مطلوب لإنشاء حساب المسؤول</ng-container>
+              <ng-container *ngIf="control.hasError('email')">يرجى إدخال بريد إلكتروني صالح</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Admin Password (Only on Create) -->
+        <nz-form-item *ngIf="!isEditMode">
+          <nz-form-label nzRequired nzFor="adminPassword">كلمة مرور حساب المسؤول (Admin Password)</nz-form-label>
+          <nz-form-control [nzErrorTip]="passwordErrorTpl">
+            <nz-input-group [nzPrefix]="lockPrefix">
+              <input
+                nz-input
+                id="adminPassword"
+                formControlName="adminPassword"
+                placeholder="كلمة مرور قوية (6 أحرف على الأقل)"
+                type="password"
+              />
+            </nz-input-group>
+            <ng-template #lockPrefix><i nz-icon nzType="lock"></i></ng-template>
+            <ng-template #passwordErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('required')">كلمة المرور مطلوبة لتهيئة حساب المغسلة</ng-container>
+              <ng-container *ngIf="control.hasError('minlength')">يجب ألا تقل كلمة المرور عن 6 خانات</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-container>
+  </nz-modal>
+
+  <!-- Dedicated Modal to Change / Upgrade Subscription Plan -->
+  <nz-modal
+    [(nzVisible)]="isPlanModalVisible"
+    nzTitle="ترقية وتغيير باقة الاشتراك للمغسلة"
+    (nzOnCancel)="isPlanModalVisible = false"
+    (nzOnOk)="saveSubscriptionPlan()"
+    [nzOkLoading]="isSavingPlan"
+    nzOkText="تأكيد وحفظ الباقة"
+    nzCancelText="إلغاء"
+    [nzWidth]="520"
+  >
+    <ng-container *nzModalContent>
+      <div class="upgrade-plan-modal-body">
+        <div class="current-plan-banner">
+          <div class="banner-icon"><i nz-icon nzType="shop"></i></div>
+          <div class="banner-text">
+            <h4>{{ planTenant?.name }}</h4>
+            <p>الباقة الحالية: <strong>{{ planTenant?.editionName || 'Professional' }}</strong></p>
+          </div>
+        </div>
+
+        <div class="plan-selection-section">
+          <label class="section-label">اختر الباقة الجديدة للمغسلة:</label>
+          <nz-select [(ngModel)]="selectedPlanEditionId" class="full-width-select" nzSize="large">
+            <nz-option
+              *ngFor="let edition of availableEditions"
+              [nzValue]="edition.id"
+              [nzLabel]="edition.displayName + (edition.price ? ' - ' + edition.price + ' ر.س/شهرياً' : ' - مجانية')"
+            ></nz-option>
+          </nz-select>
+        </div>
+
+        <div class="plan-cycle-section">
+          <label class="section-label">دورة الفوترة:</label>
+          <nz-radio-group [(ngModel)]="selectedPlanCycle" nzButtonStyle="solid">
+            <label nz-radio-button nzValue="monthly">شهرياً (Monthly)</label>
+            <label nz-radio-button nzValue="annual">سنوياً (Annual)</label>
+          </nz-radio-group>
+        </div>
+      </div>
+    </ng-container>
+  </nz-modal>
+
+  <!-- Connection String Modal -->
+  <nz-modal
+    [(nzVisible)]="isConnModalVisible"
+    nzTitle="سلسلة اتصال قاعدة البيانات الخاصة بالمستأجر"
+    (nzOnCancel)="isConnModalVisible = false"
+    (nzOnOk)="saveConnectionString()"
+    [nzOkLoading]="isSavingConnString"
+    nzOkText="حفظ سلسلة الاتصال"
+    nzCancelText="إلغاء"
+    [nzWidth]="600"
+  >
+    <ng-container *nzModalContent>
+      <div class="conn-modal-body">
+        <p class="conn-info-text">
+          يمكنك تحديد سلسلة اتصال قاعدة بيانات مخصصة ومستقلة لمغسلة <strong>{{ connStringTenant?.name }}</strong>، أو ترك الحقل فارغاً لاستخدام قاعدة البيانات الموحدة للمنظومة.
+        </p>
+
+        <nz-form-item>
+          <nz-form-label nzFor="connString">سلسلة الاتصال (Connection String)</nz-form-label>
+          <nz-form-control>
+            <textarea
+              nz-input
+              id="connString"
+              rows="4"
+              [(ngModel)]="defaultConnectionString"
+              placeholder="Server=...;Database=...;User Id=...;Password=...;"
+            ></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </ng-container>
+  </nz-modal>
+</div>

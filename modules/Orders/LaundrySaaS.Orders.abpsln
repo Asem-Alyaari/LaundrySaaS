@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "LaundrySaaS.Orders": {
+      "path": "LaundrySaaS.Orders.abpmdl"
+    }
+  }
+}

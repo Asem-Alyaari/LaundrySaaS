@@ -1,0 +1,330 @@
+<div dir="rtl" class="admin-wrapper">
+  <nz-layout class="app-layout">
+    <!-- Sidebar Navigation -->
+    <nz-sider
+      class="app-sider"
+      nzCollapsible
+      nzWidth="280px"
+      [nzCollapsedWidth]="80"
+      [(nzCollapsed)]="isCollapsed"
+      [nzTrigger]="null"
+    >
+      <!-- Logo & Brand Header -->
+      <div class="sidebar-brand" [class.collapsed-brand]="isCollapsed">
+        <div class="brand-logo-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="2" width="18" height="20" rx="4" ry="4" stroke="currentColor" fill="rgba(255,255,255,0.15)"></rect>
+            <circle cx="12" cy="13" r="4.5" stroke="currentColor"></circle>
+            <path d="M12 10.5a2.5 2.5 0 0 1 2.5 2.5"></path>
+            <circle cx="7" cy="5.5" r="0.75" fill="currentColor"></circle>
+            <line x1="10" y1="5.5" x2="13" y2="5.5"></line>
+            <line x1="15" y1="5.5" x2="17" y2="5.5"></line>
+          </svg>
+        </div>
+        <div class="brand-info" *ngIf="!isCollapsed">
+          <div class="brand-title-row">
+            <span class="brand-name">LaundrySaaS</span>
+            <span class="brand-badge">PRO</span>
+          </div>
+          <span class="brand-tag">منصة إدارة وتشغيل المغاسل الذكية</span>
+        </div>
+      </div>
+
+      <!-- Quick Search Bar (When Expanded) -->
+      <div class="sidebar-search-box" *ngIf="!isCollapsed">
+        <div class="search-input-wrapper">
+          <i nz-icon nzType="search" class="search-icon"></i>
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            placeholder="بحث سريع في القوائم..."
+            class="sidebar-search-input"
+          />
+          <i
+            nz-icon
+            nzType="close-circle"
+            nzTheme="fill"
+            class="clear-search-icon"
+            *ngIf="searchQuery"
+            (click)="searchQuery = ''"
+          ></i>
+        </div>
+      </div>
+
+      <!-- Organized Navigation Menu -->
+      <div class="menu-container">
+        <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+          
+          <!-- Group 1: Overview & Analytics -->
+          <li
+            nz-menu-group
+            *ngIf="!isCollapsed && (matchesSearch('لوحة التحكم') || matchesSearch('التقارير') || matchesSearch('الإحصائيات'))"
+            nzTitle="الرئيسية والتحليلات"
+          ></li>
+
+          <li nz-menu-item nzMatchRouter *ngIf="matchesSearch('لوحة التحكم الرئيسية') || matchesSearch('الإحصائيات')">
+            <a routerLink="/dashboard" nz-tooltip [nzTooltipTitle]="isCollapsed ? 'لوحة التحكم الرئيسية' : ''" nzTooltipPlacement="left">
+              <span class="menu-item-content">
+                <i nz-icon nzType="dashboard" class="nav-icon"></i>
+                <span class="nav-text" *ngIf="!isCollapsed">لوحة التحكم الرئيسية</span>
+              </span>
+            </a>
+          </li>
+
+          <!-- Group 2: Laundries & Services -->
+          <li
+            nz-menu-group
+            *ngIf="!isCollapsed && (matchesSearch('المغاسل') || matchesSearch('الخدمات') || matchesSearch('الكتالوج') || matchesSearch('الأسعار'))"
+            nzTitle="إدارة المغاسل والخدمات"
+          ></li>
+
+          <li
+            nz-submenu
+            nzTitle="المغاسل والخدمات"
+            nzIcon="shop"
+            [nzOpen]="laundriesOpen || !!searchQuery"
+            (nzOpenChange)="laundriesOpen = $event"
+            *ngIf="matchesSearch('المغاسل') || matchesSearch('الخدمات') || matchesSearch('الكتالوج') || matchesSearch('الأسعار')"
+          >
+            <ul>
+              <li nz-menu-item nzMatchRouter *ngIf="matchesSearch('قائمة المغاسل') || matchesSearch('المغاسل')">
+                <a routerLink="/laundries-admin">
+                  <span class="menu-item-content sub-item">
+                    <i nz-icon nzType="unordered-list" class="nav-icon sub-icon"></i>
+                    <span class="nav-text">إدارة وشبكة المغاسل</span>
+                  </span>
+                </a>
+              </li>
+              <li nz-menu-item nzMatchRouter *ngIf="matchesSearch('الباقات') || matchesSearch('الاشتراكات')">
+                <a routerLink="/editions">
+                  <span class="menu-item-content sub-item">
+                    <i nz-icon nzType="gift" class="nav-icon sub-icon"></i>
+                    <span class="nav-text">باقات واشتراكات المغاسل</span>
+                  </span>
+                </a>
+              </li>
+              <li nz-menu-item nzMatchRouter *ngIf="matchesSearch('كتالوج الخدمات') || matchesSearch('الأسعار') || matchesSearch('الخدمات')">
+                <a routerLink="/services">
+                  <span class="menu-item-content sub-item">
+                    <i nz-icon nzType="tags" class="nav-icon sub-icon"></i>
+                    <span class="nav-text">كتالوج الأسعار والخدمات</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Group 3: Operations & Fleet -->
+          <li
+            nz-menu-group
+            *ngIf="!isCollapsed && (matchesSearch('الطلبات') || matchesSearch('المناديب') || matchesSearch('التوصيل') || matchesSearch('العمليات'))"
+            nzTitle="العمليات والتشغيل"
+          ></li>
+
+          <li nz-menu-item nzMatchRouter *ngIf="matchesSearch('إدارة الطلبات') || matchesSearch('الطلبات')">
+            <a routerLink="/orders" nz-tooltip [nzTooltipTitle]="isCollapsed ? 'إدارة الطلبات (5 جديدة)' : ''" nzTooltipPlacement="left">
+              <span class="menu-item-content">
+                <i nz-icon nzType="shopping-cart" class="nav-icon"></i>
+                <span class="nav-text" *ngIf="!isCollapsed">إدارة الطلبات</span>
+                <span class="status-pill order-pill" *ngIf="!isCollapsed">5 جديدة</span>
+              </span>
+            </a>
+          </li>
+
+          <li nz-menu-item nzMatchRouter *ngIf="matchesSearch('أسطول المناديب') || matchesSearch('المناديب') || matchesSearch('التوصيل')">
+            <a routerLink="/drivers" nz-tooltip [nzTooltipTitle]="isCollapsed ? 'أسطول المناديب (14 متصل)' : ''" nzTooltipPlacement="left">
+              <span class="menu-item-content">
+                <i nz-icon nzType="car" class="nav-icon"></i>
+                <span class="nav-text" *ngIf="!isCollapsed">أسطول المناديب</span>
+                <span class="status-pill driver-pill" *ngIf="!isCollapsed">14 متصل</span>
+              </span>
+            </a>
+          </li>
+
+          <!-- Group 4: CRM & Customers -->
+          <li
+            nz-menu-group
+            *ngIf="!isCollapsed && (matchesSearch('العملاء') || matchesSearch('العلاقات') || matchesSearch('التقييمات'))"
+            nzTitle="علاقات العملاء"
+          ></li>
+
+          <li nz-menu-item nzMatchRouter *ngIf="matchesSearch('إدارة العملاء') || matchesSearch('العملاء')">
+            <a routerLink="/customers" nz-tooltip [nzTooltipTitle]="isCollapsed ? 'إدارة العملاء' : ''" nzTooltipPlacement="left">
+              <span class="menu-item-content">
+                <i nz-icon nzType="team" class="nav-icon"></i>
+                <span class="nav-text" *ngIf="!isCollapsed">إدارة العملاء</span>
+              </span>
+            </a>
+          </li>
+
+          <!-- Group 5: System Administration -->
+          <li
+            nz-menu-group
+            *ngIf="!isCollapsed && (matchesSearch('المستخدمين') || matchesSearch('الصلاحيات') || matchesSearch('النظام') || matchesSearch('الشركات') || matchesSearch('الإعدادات'))"
+            nzTitle="النظام والإعدادات"
+          ></li>
+
+          <li
+            nz-submenu
+            nzTitle="إدارة النظام والصلاحيات"
+            nzIcon="setting"
+            [nzOpen]="systemOpen || !!searchQuery"
+            (nzOpenChange)="systemOpen = $event"
+            *ngIf="matchesSearch('المستخدمين') || matchesSearch('الصلاحيات') || matchesSearch('النظام') || matchesSearch('الشركات') || matchesSearch('الإعدادات')"
+          >
+            <ul>
+              <li nz-menu-item nzMatchRouter *ngIf="matchesSearch('المستخدمين')">
+                <a routerLink="/identity/users">
+                  <span class="menu-item-content sub-item">
+                    <i nz-icon nzType="user" class="nav-icon sub-icon"></i>
+                    <span class="nav-text">إدارة المستخدمين</span>
+                  </span>
+                </a>
+              </li>
+              <li nz-menu-item nzMatchRouter *ngIf="matchesSearch('الصلاحيات') || matchesSearch('الأدوار')">
+                <a routerLink="/identity/roles">
+                  <span class="menu-item-content sub-item">
+                    <i nz-icon nzType="safety-certificate" class="nav-icon sub-icon"></i>
+                    <span class="nav-text">الأدوار والصلاحيات</span>
+                  </span>
+                </a>
+              </li>
+              <li nz-menu-item nzMatchRouter *ngIf="matchesSearch('الشركات') || matchesSearch('الفروع')">
+                <a routerLink="/laundries-admin">
+                  <span class="menu-item-content sub-item">
+                    <i nz-icon nzType="cluster" class="nav-icon sub-icon"></i>
+                    <span class="nav-text">إدارة الشركات والمستأجرين</span>
+                  </span>
+                </a>
+              </li>
+              <li nz-menu-item nzMatchRouter *ngIf="matchesSearch('الملف الشخصي') || matchesSearch('الحساب')">
+                <a routerLink="/account/manage">
+                  <span class="menu-item-content sub-item">
+                    <i nz-icon nzType="idcard" class="nav-icon sub-icon"></i>
+                    <span class="nav-text">الملف الشخصي والحساب</span>
+                  </span>
+                </a>
+              </li>
+              <li nz-menu-item nzMatchRouter *ngIf="matchesSearch('الإعدادات') || matchesSearch('النظام')">
+                <a routerLink="/setting-management">
+                  <span class="menu-item-content sub-item">
+                    <i nz-icon nzType="control" class="nav-icon sub-icon"></i>
+                    <span class="nav-text">إعدادات النظام العامة</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- Sidebar Footer (User Card & Toggle) -->
+      <div class="sidebar-footer">
+        <div class="sidebar-user-card" *ngIf="!isCollapsed">
+          <div class="user-avatar-wrapper">
+            <div class="avatar-circle">
+              <i nz-icon nzType="user"></i>
+            </div>
+            <span class="online-indicator"></span>
+          </div>
+          <div class="user-info-text">
+            <span class="user-role-name">المدير العام</span>
+            <span class="user-email-text">admin&#64;laundrysaas.com</span>
+          </div>
+          <button
+            type="button"
+            class="logout-action-btn"
+            (click)="logout()"
+            nz-tooltip
+            nzTooltipTitle="تسجيل الخروج"
+            nzTooltipPlacement="top"
+          >
+            <i nz-icon nzType="logout"></i>
+          </button>
+        </div>
+
+        <!-- Toggle Collapse Button -->
+        <button
+          type="button"
+          class="collapse-action-btn"
+          (click)="isCollapsed = !isCollapsed"
+          [nz-tooltip]="isCollapsed ? 'توسيع القائمة' : ''"
+          nzTooltipPlacement="left"
+        >
+          <i nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'" class="collapse-icon"></i>
+          <span class="collapse-label" *ngIf="!isCollapsed">طي القائمة الجانبية</span>
+        </button>
+      </div>
+    </nz-sider>
+
+    <!-- Main Content Area -->
+    <nz-layout class="main-layout">
+      <!-- Header Bar -->
+      <nz-header class="app-header">
+        <div class="header-left">
+          <button
+            type="button"
+            class="sidebar-trigger-btn"
+            (click)="isCollapsed = !isCollapsed"
+            nz-tooltip
+            [nzTooltipTitle]="isCollapsed ? 'توسيع القائمة' : 'طي القائمة'"
+          >
+            <i nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+          </button>
+          
+          <div class="header-title-badge">
+            <i nz-icon nzType="appstore" class="title-icon"></i>
+            <span class="title-text">{{ currentRouteTitle }}</span>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <div class="header-action notification-btn" nz-tooltip nzTooltipTitle="التنبيهات والطلبات الجديدة">
+            <nz-badge [nzCount]="5" [nzOverflowCount]="99">
+              <i nz-icon nzType="bell" nzTheme="outline" class="action-icon"></i>
+            </nz-badge>
+          </div>
+
+          <div class="header-divider"></div>
+
+          <div class="header-user-badge" nz-dropdown [nzDropdownMenu]="userMenu" nzPlacement="bottomLeft">
+            <div class="header-avatar">
+              <i nz-icon nzType="user"></i>
+            </div>
+            <div class="header-user-info">
+              <span class="user-name">المدير العام</span>
+              <span class="user-role-label">مسؤول النظام</span>
+            </div>
+            <i nz-icon nzType="down" class="dropdown-chevron"></i>
+          </div>
+
+          <nz-dropdown-menu #userMenu="nzDropdownMenu">
+            <ul nz-menu class="user-dropdown-menu">
+              <li nz-menu-item routerLink="/account/manage">
+                <i nz-icon nzType="user" nzTheme="outline"></i>
+                <span>الملف الشخصي</span>
+              </li>
+              <li nz-menu-item routerLink="/setting-management">
+                <i nz-icon nzType="setting" nzTheme="outline"></i>
+                <span>إعدادات النظام</span>
+              </li>
+              <li nz-menu-divider></li>
+              <li nz-menu-item (click)="logout()" class="logout-menu-item">
+                <i nz-icon nzType="logout" nzTheme="outline"></i>
+                <span>تسجيل الخروج</span>
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </nz-header>
+
+      <!-- Content Area -->
+      <nz-content class="app-content">
+        <div class="content-body">
+          <router-outlet></router-outlet>
+        </div>
+      </nz-content>
+    </nz-layout>
+  </nz-layout>
+</div>

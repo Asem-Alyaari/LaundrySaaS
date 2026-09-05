@@ -1,0 +1,76 @@
+<Solution>
+  <Folder Name="/host/">
+    <Project Path="host/LaundrySaaS.AuthServer/LaundrySaaS.AuthServer.csproj" />
+    <Project Path="host/LaundrySaaS.Blazor.Host.Client/LaundrySaaS.Blazor.Host.Client.csproj" />
+    <Project Path="host/LaundrySaaS.Blazor.Host/LaundrySaaS.Blazor.Host.csproj" />
+    <Project Path="host/LaundrySaaS.Blazor.Server.Host/LaundrySaaS.Blazor.Server.Host.csproj" />
+    <Project Path="host/LaundrySaaS.Host.Shared/LaundrySaaS.Host.Shared.csproj" />
+    <Project Path="host/LaundrySaaS.HttpApi.Host/LaundrySaaS.HttpApi.Host.csproj" />
+    <Project Path="host/LaundrySaaS.Web.Host/LaundrySaaS.Web.Host.csproj" />
+    <Project Path="host/LaundrySaaS.Web.Unified/LaundrySaaS.Web.Unified.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/LaundrySaaS.Application.Contracts/LaundrySaaS.Application.Contracts.csproj" />
+    <Project Path="src/LaundrySaaS.Application/LaundrySaaS.Application.csproj" />
+    <Project Path="src/LaundrySaaS.Blazor.Server/LaundrySaaS.Blazor.Server.csproj" />
+    <Project Path="src/LaundrySaaS.Blazor.WebAssembly.Bundling/LaundrySaaS.Blazor.WebAssembly.Bundling.csproj" />
+    <Project Path="src/LaundrySaaS.Blazor.WebAssembly/LaundrySaaS.Blazor.WebAssembly.csproj" />
+    <Project Path="src/LaundrySaaS.Blazor/LaundrySaaS.Blazor.csproj" />
+    <Project Path="src/LaundrySaaS.Domain.Shared/LaundrySaaS.Domain.Shared.csproj" />
+    <Project Path="src/LaundrySaaS.Domain/LaundrySaaS.Domain.csproj" />
+    <Project Path="src/LaundrySaaS.EntityFrameworkCore/LaundrySaaS.EntityFrameworkCore.csproj" />
+    <Project Path="src/LaundrySaaS.HttpApi.Client/LaundrySaaS.HttpApi.Client.csproj" />
+    <Project Path="src/LaundrySaaS.HttpApi/LaundrySaaS.HttpApi.csproj" />
+    <Project Path="src/LaundrySaaS.Installer/LaundrySaaS.Installer.csproj" />
+    <Project Path="src/LaundrySaaS.MongoDB/LaundrySaaS.MongoDB.csproj" />
+    <Project Path="src/LaundrySaaS.Web/LaundrySaaS.Web.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/LaundrySaaS.Application.Tests/LaundrySaaS.Application.Tests.csproj" />
+    <Project Path="test/LaundrySaaS.Domain.Tests/LaundrySaaS.Domain.Tests.csproj" />
+    <Project Path="test/LaundrySaaS.EntityFrameworkCore.Tests/LaundrySaaS.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/LaundrySaaS.HttpApi.Client.ConsoleTestApp/LaundrySaaS.HttpApi.Client.ConsoleTestApp.csproj" />
+    <Project Path="test/LaundrySaaS.MongoDB.Tests/LaundrySaaS.MongoDB.Tests.csproj" />
+    <Project Path="test/LaundrySaaS.TestBase/LaundrySaaS.TestBase.csproj" />
+  </Folder>
+  <Folder Name="/modules/Customers/">
+    <Project Path="modules/Customers/src/LaundrySaaS.Customers.Application.Contracts/LaundrySaaS.Customers.Application.Contracts.csproj" />
+    <Project Path="modules/Customers/src/LaundrySaaS.Customers.Application/LaundrySaaS.Customers.Application.csproj" />
+    <Project Path="modules/Customers/src/LaundrySaaS.Customers.Domain.Shared/LaundrySaaS.Customers.Domain.Shared.csproj" />
+    <Project Path="modules/Customers/src/LaundrySaaS.Customers.Domain/LaundrySaaS.Customers.Domain.csproj" />
+    <Project Path="modules/Customers/src/LaundrySaaS.Customers.EntityFrameworkCore/LaundrySaaS.Customers.EntityFrameworkCore.csproj" />
+    <Project Path="modules/Customers/src/LaundrySaaS.Customers.HttpApi.Client/LaundrySaaS.Customers.HttpApi.Client.csproj" />
+    <Project Path="modules/Customers/src/LaundrySaaS.Customers.HttpApi/LaundrySaaS.Customers.HttpApi.csproj" />
+    <Project Path="modules/Customers/src/LaundrySaaS.Customers.Installer/LaundrySaaS.Customers.Installer.csproj" />
+  </Folder>
+  <Folder Name="/modules/Drivers/">
+    <Project Path="modules/Drivers/src/LaundrySaaS.Drivers.Application.Contracts/LaundrySaaS.Drivers.Application.Contracts.csproj" />
+    <Project Path="modules/Drivers/src/LaundrySaaS.Drivers.Application/LaundrySaaS.Drivers.Application.csproj" />
+    <Project Path="modules/Drivers/src/LaundrySaaS.Drivers.Domain.Shared/LaundrySaaS.Drivers.Domain.Shared.csproj" />
+    <Project Path="modules/Drivers/src/LaundrySaaS.Drivers.Domain/LaundrySaaS.Drivers.Domain.csproj" />
+    <Project Path="modules/Drivers/src/LaundrySaaS.Drivers.EntityFrameworkCore/LaundrySaaS.Drivers.EntityFrameworkCore.csproj" />
+    <Project Path="modules/Drivers/src/LaundrySaaS.Drivers.HttpApi.Client/LaundrySaaS.Drivers.HttpApi.Client.csproj" />
+    <Project Path="modules/Drivers/src/LaundrySaaS.Drivers.HttpApi/LaundrySaaS.Drivers.HttpApi.csproj" />
+    <Project Path="modules/Drivers/src/LaundrySaaS.Drivers.Installer/LaundrySaaS.Drivers.Installer.csproj" />
+  </Folder>
+  <Folder Name="/modules/Orders/">
+    <Project Path="modules/Orders/src/LaundrySaaS.Orders.Application.Contracts/LaundrySaaS.Orders.Application.Contracts.csproj" />
+    <Project Path="modules/Orders/src/LaundrySaaS.Orders.Application/LaundrySaaS.Orders.Application.csproj" />
+    <Project Path="modules/Orders/src/LaundrySaaS.Orders.Domain.Shared/LaundrySaaS.Orders.Domain.Shared.csproj" />
+    <Project Path="modules/Orders/src/LaundrySaaS.Orders.Domain/LaundrySaaS.Orders.Domain.csproj" />
+    <Project Path="modules/Orders/src/LaundrySaaS.Orders.EntityFrameworkCore/LaundrySaaS.Orders.EntityFrameworkCore.csproj" />
+    <Project Path="modules/Orders/src/LaundrySaaS.Orders.HttpApi.Client/LaundrySaaS.Orders.HttpApi.Client.csproj" />
+    <Project Path="modules/Orders/src/LaundrySaaS.Orders.HttpApi/LaundrySaaS.Orders.HttpApi.csproj" />
+    <Project Path="modules/Orders/src/LaundrySaaS.Orders.Installer/LaundrySaaS.Orders.Installer.csproj" />
+  </Folder>
+  <Folder Name="/modules/Laundries/">
+    <Project Path="modules/Laundries/src/LaundrySaaS.Laundries.Application.Contracts/LaundrySaaS.Laundries.Application.Contracts.csproj" />
+    <Project Path="modules/Laundries/src/LaundrySaaS.Laundries.Application/LaundrySaaS.Laundries.Application.csproj" />
+    <Project Path="modules/Laundries/src/LaundrySaaS.Laundries.Domain.Shared/LaundrySaaS.Laundries.Domain.Shared.csproj" />
+    <Project Path="modules/Laundries/src/LaundrySaaS.Laundries.Domain/LaundrySaaS.Laundries.Domain.csproj" />
+    <Project Path="modules/Laundries/src/LaundrySaaS.Laundries.EntityFrameworkCore/LaundrySaaS.Laundries.EntityFrameworkCore.csproj" />
+    <Project Path="modules/Laundries/src/LaundrySaaS.Laundries.HttpApi.Client/LaundrySaaS.Laundries.HttpApi.Client.csproj" />
+    <Project Path="modules/Laundries/src/LaundrySaaS.Laundries.HttpApi/LaundrySaaS.Laundries.HttpApi.csproj" />
+    <Project Path="modules/Laundries/src/LaundrySaaS.Laundries.Installer/LaundrySaaS.Laundries.Installer.csproj" />
+  </Folder>
+</Solution>

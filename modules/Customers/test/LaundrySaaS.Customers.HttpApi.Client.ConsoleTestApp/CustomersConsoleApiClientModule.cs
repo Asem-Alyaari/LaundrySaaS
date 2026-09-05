@@ -1,0 +1,15 @@
+﻿using Volo.Abp.Autofac;
+using Volo.Abp.Http.Client.IdentityModel;
+using Volo.Abp.Modularity;
+
+namespace LaundrySaaS.Customers;
+
+[DependsOn(
+    typeof(AbpAutofacModule),
+    typeof(CustomersHttpApiClientModule),
+    typeof(AbpHttpClientIdentityModelModule)
+    )]
+public class CustomersConsoleApiClientModule : AbpModule
+{
+
+}
