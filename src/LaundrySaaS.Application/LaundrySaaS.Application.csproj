@@ -21,6 +21,8 @@
     <ProjectReference Include="..\..\modules\Orders\src\LaundrySaaS.Orders.Domain\LaundrySaaS.Orders.Domain.csproj" />
     <ProjectReference Include="..\..\modules\Laundries\src\LaundrySaaS.Laundries.Application\LaundrySaaS.Laundries.Application.csproj" />
     <ProjectReference Include="..\..\modules\Laundries\src\LaundrySaaS.Laundries.Domain\LaundrySaaS.Laundries.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\Accounting\src\LaundrySaaS.Accounting.Application\LaundrySaaS.Accounting.Application.csproj" />
+    <ProjectReference Include="..\..\modules\Accounting\src\LaundrySaaS.Accounting.Domain\LaundrySaaS.Accounting.Domain.csproj" />
   </ItemGroup>
 
 </Project>

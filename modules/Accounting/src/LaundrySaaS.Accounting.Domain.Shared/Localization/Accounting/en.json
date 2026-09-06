@@ -1,0 +1,26 @@
+{
+  "culture": "en",
+  "texts": {
+    "Menu:Accounting": "Accounting",
+    "Accounts": "Chart of Accounts",
+    "JournalEntries": "Journal Entries",
+    "FiscalYears": "Fiscal Years",
+    "CostCenters": "Cost Centers",
+    "Reports": "Accounting Reports",
+    "TrialBalance": "Trial Balance",
+    "GeneralLedger": "General Ledger",
+    "AccountStatement": "Account Statement",
+    "Accounting:00001": "An account with code '{0}' already exists.",
+    "Accounting:00002": "Account not found.",
+    "Accounting:00003": "Cannot post direct transactions to parent or non-leaf account '{0}'.",
+    "Accounting:00004": "Journal entry is not balanced. Total debit must equal total credit.",
+    "Accounting:00005": "Cannot post transaction to a closed fiscal period.",
+    "Accounting:00006": "Journal entry is already posted.",
+    "Accounting:00007": "A journal entry must have at least two balanced lines.",
+    "Accounting:00008": "Cannot delete account that has recorded journal transactions.",
+    "Accounting:00009": "Fiscal year is closed.",
+    "Accounting:00010": "Cost center not found.",
+    "Accounting:00011": "Account level hierarchy exceeded.",
+    "Accounting:00012": "Debit and credit amounts must be non-negative, and at least one must be greater than zero."
+  }
+}

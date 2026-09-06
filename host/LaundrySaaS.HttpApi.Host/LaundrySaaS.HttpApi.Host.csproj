@@ -42,6 +42,8 @@
     <ProjectReference Include="..\..\modules\Orders\src\LaundrySaaS.Orders.EntityFrameworkCore\LaundrySaaS.Orders.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\modules\Laundries\src\LaundrySaaS.Laundries.HttpApi\LaundrySaaS.Laundries.HttpApi.csproj" />
     <ProjectReference Include="..\..\modules\Laundries\src\LaundrySaaS.Laundries.EntityFrameworkCore\LaundrySaaS.Laundries.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\modules\Accounting\src\LaundrySaaS.Accounting.HttpApi\LaundrySaaS.Accounting.HttpApi.csproj" />
+    <ProjectReference Include="..\..\modules\Accounting\src\LaundrySaaS.Accounting.EntityFrameworkCore\LaundrySaaS.Accounting.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\LaundrySaaS.Host.Shared\LaundrySaaS.Host.Shared.csproj" />
   </ItemGroup>
 

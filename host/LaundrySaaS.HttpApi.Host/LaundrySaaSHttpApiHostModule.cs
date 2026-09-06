@@ -43,6 +43,8 @@ using LaundrySaaS.Orders;
 using LaundrySaaS.Orders.EntityFrameworkCore;
 using LaundrySaaS.Laundries;
 using LaundrySaaS.Laundries.EntityFrameworkCore;
+using LaundrySaaS.Accounting;
+using LaundrySaaS.Accounting.EntityFrameworkCore;
 
 namespace LaundrySaaS;
 
@@ -58,6 +60,8 @@ namespace LaundrySaaS;
     typeof(OrdersEntityFrameworkCoreModule),
     typeof(LaundriesHttpApiModule),
     typeof(LaundriesEntityFrameworkCoreModule),
+    typeof(AccountingHttpApiModule),
+    typeof(AccountingEntityFrameworkCoreModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAutofacModule),

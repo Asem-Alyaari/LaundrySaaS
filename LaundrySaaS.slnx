@@ -73,4 +73,14 @@
     <Project Path="modules/Laundries/src/LaundrySaaS.Laundries.HttpApi/LaundrySaaS.Laundries.HttpApi.csproj" />
     <Project Path="modules/Laundries/src/LaundrySaaS.Laundries.Installer/LaundrySaaS.Laundries.Installer.csproj" />
   </Folder>
+  <Folder Name="/modules/Accounting/">
+    <Project Path="modules/Accounting/src/LaundrySaaS.Accounting.Application.Contracts/LaundrySaaS.Accounting.Application.Contracts.csproj" />
+    <Project Path="modules/Accounting/src/LaundrySaaS.Accounting.Application/LaundrySaaS.Accounting.Application.csproj" />
+    <Project Path="modules/Accounting/src/LaundrySaaS.Accounting.Domain.Shared/LaundrySaaS.Accounting.Domain.Shared.csproj" />
+    <Project Path="modules/Accounting/src/LaundrySaaS.Accounting.Domain/LaundrySaaS.Accounting.Domain.csproj" />
+    <Project Path="modules/Accounting/src/LaundrySaaS.Accounting.EntityFrameworkCore/LaundrySaaS.Accounting.EntityFrameworkCore.csproj" />
+    <Project Path="modules/Accounting/src/LaundrySaaS.Accounting.HttpApi.Client/LaundrySaaS.Accounting.HttpApi.Client.csproj" />
+    <Project Path="modules/Accounting/src/LaundrySaaS.Accounting.HttpApi/LaundrySaaS.Accounting.HttpApi.csproj" />
+    <Project Path="modules/Accounting/src/LaundrySaaS.Accounting.Installer/LaundrySaaS.Accounting.Installer.csproj" />
+  </Folder>
 </Solution>

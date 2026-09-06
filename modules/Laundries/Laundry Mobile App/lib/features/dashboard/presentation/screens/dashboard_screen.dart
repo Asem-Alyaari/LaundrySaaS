@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
 import '../../../catalog/presentation/screens/catalog_screen.dart';
+import '../../../drivers/presentation/screens/drivers_screen.dart';
 import '../../../laundry_setup/data/models/laundry_dto.dart';
 import '../../../laundry_setup/data/repositories/laundry_repository.dart';
 
@@ -91,6 +92,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       );
     }
+  }
+
+  void _openDrivers() {
+    final auth = context.read<AuthController>();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => DriversScreen(
+          tenant: auth.tenantName ?? '',
+          accessToken: auth.accessToken ?? '',
+          laundryId: auth.laundryId ?? _laundry?.id,
+        ),
+      ),
+    );
   }
 
   void _showLogoutDialog(BuildContext context, AuthController auth) {
@@ -784,10 +798,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
           childAspectRatio: 1.35,
           children: [
             _buildOperationTile(
+              title: 'مناديب التوصيل',
+              subtitle: 'متابعة وتوفر المناديب',
+              icon: Icons.delivery_dining_rounded,
+              color: const Color(0xFF0284C7),
+              onTap: _openDrivers,
+            ),
+            _buildOperationTile(
               title: 'نقطة البيع (POS)',
               subtitle: 'استقبال وفاتورة فورية',
               icon: Icons.point_of_sale_rounded,
-              color: const Color(0xFF0284C7),
+              color: const Color(0xFF0D9488),
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -829,6 +850,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('التقارير المالية والتشغيلية قيد التطوير'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
+            ),
+            _buildOperationTile(
+              title: 'الطابعة والباركود',
+              subtitle: 'إعدادات طباعة الفواتير',
+              icon: Icons.print_outlined,
+              color: const Color(0xFF8B5CF6),
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('إعدادات الطابعة والباركود الحراري قيد التطوير'),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );

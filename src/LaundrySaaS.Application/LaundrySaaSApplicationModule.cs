@@ -7,6 +7,7 @@ using LaundrySaaS.Customers;
 using LaundrySaaS.Drivers;
 using LaundrySaaS.Orders;
 using LaundrySaaS.Laundries;
+using LaundrySaaS.Accounting;
 
 namespace LaundrySaaS;
 
@@ -22,7 +23,9 @@ namespace LaundrySaaS;
     typeof(OrdersApplicationModule),
     typeof(OrdersDomainModule),
     typeof(LaundriesApplicationModule),
-    typeof(LaundriesDomainModule)
+    typeof(LaundriesDomainModule),
+    typeof(AccountingApplicationModule),
+    typeof(AccountingDomainModule)
     )]
 public class LaundrySaaSApplicationModule : AbpModule
 {

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>LaundrySaaS.Accounting</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.MongoDB" Version="10.6.0" />
+    <ProjectReference Include="..\LaundrySaaS.Accounting.Domain\LaundrySaaS.Accounting.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
