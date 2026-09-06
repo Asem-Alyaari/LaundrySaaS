@@ -4,6 +4,8 @@ import '../../../auth/presentation/controllers/auth_controller.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
 import '../../../catalog/presentation/screens/catalog_screen.dart';
 import '../../../drivers/presentation/screens/drivers_screen.dart';
+import '../../../orders/presentation/screens/create_order_screen.dart';
+import '../../../orders/presentation/screens/orders_list_screen.dart';
 import '../../../laundry_setup/data/models/laundry_dto.dart';
 import '../../../laundry_setup/data/repositories/laundry_repository.dart';
 
@@ -105,6 +107,90 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _openCreateOrder() async {
+    final auth = context.read<AuthController>();
+    String? laundryId = auth.laundryId ?? _laundry?.id;
+
+    if (laundryId == null || laundryId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('جاري جلب بيانات المغسلة... يرجى الانتظار'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      await _loadLaundryProfile();
+      laundryId = auth.laundryId ?? _laundry?.id;
+    }
+
+    if (!mounted) return;
+
+    if (laundryId != null && laundryId.isNotEmpty) {
+      final result = await Navigator.of(context).push<bool>(
+        MaterialPageRoute(
+          builder: (_) => CreateOrderScreen(
+            tenant: auth.tenantName ?? '',
+            accessToken: auth.accessToken ?? '',
+            laundryId: laundryId!,
+            laundryName: _laundry?.name ?? 'مغسلتي',
+          ),
+        ),
+      );
+      if (result == true && mounted) {
+        _loadLaundryProfile();
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('تعذر العثور على معرّف المغسلة، تأكد من استكمال البيانات'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Color(0xFFEF4444),
+        ),
+      );
+    }
+  }
+
+  Future<void> _openOrdersList() async {
+    final auth = context.read<AuthController>();
+    String? laundryId = auth.laundryId ?? _laundry?.id;
+
+    if (laundryId == null || laundryId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('جاري جلب بيانات المغسلة... يرجى الانتظار'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      await _loadLaundryProfile();
+      laundryId = auth.laundryId ?? _laundry?.id;
+    }
+
+    if (!mounted) return;
+
+    if (laundryId != null && laundryId.isNotEmpty) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => OrdersListScreen(
+            tenant: auth.tenantName ?? '',
+            accessToken: auth.accessToken ?? '',
+            laundryId: laundryId!,
+            laundryName: _laundry?.name ?? 'مغسلتي',
+          ),
+        ),
+      );
+      if (mounted) {
+        _loadLaundryProfile();
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('تعذر العثور على معرّف المغسلة، تأكد من استكمال البيانات'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Color(0xFFEF4444),
+        ),
+      );
+    }
   }
 
   void _showLogoutDialog(BuildContext context, AuthController auth) {
@@ -275,6 +361,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
             ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _openCreateOrder,
+        backgroundColor: const Color(0xFF0284C7),
+        icon: const Icon(Icons.add_shopping_cart_rounded, color: Colors.white),
+        label: const Text(
+          'فاتورة جديدة (POS)',
+          style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white),
+        ),
+      ),
       bottomNavigationBar: _buildBottomNavBar(),
     );
   }
@@ -643,35 +738,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildPipelineBadge(String label, String count, Color color, Color bg) {
     return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-        decoration: BoxDecoration(
-          color: bg,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: _openOrdersList,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
-        ),
-        child: Column(
-          children: [
-            Text(
-              count,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w900,
-                color: color,
-              ),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+            decoration: BoxDecoration(
+              color: bg,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
             ),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: color,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: Column(
+              children: [
+                Text(
+                  count,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    color: color,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: color,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -809,28 +911,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               subtitle: 'استقبال وفاتورة فورية',
               icon: Icons.point_of_sale_rounded,
               color: const Color(0xFF0D9488),
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('شاشة نقطة البيع (POS) قيد التجهيز'),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              },
+              onTap: _openCreateOrder,
             ),
             _buildOperationTile(
-              title: 'إدارة الطلبات',
-              subtitle: 'متابعة مسار الغسيل',
-              icon: Icons.assignment_turned_in_outlined,
+              title: 'سجل الفواتير والطلبات',
+              subtitle: 'متابعة وحالات الفواتير',
+              icon: Icons.receipt_long_rounded,
               color: const Color(0xFF6366F1),
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('شاشة إدارة الطلبات قيد التجهيز'),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              },
+              onTap: _openOrdersList,
             ),
             _buildOperationTile(
               title: 'بيانات المغسلة',

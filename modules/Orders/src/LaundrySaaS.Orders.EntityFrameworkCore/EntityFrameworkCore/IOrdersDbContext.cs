@@ -9,4 +9,5 @@ namespace LaundrySaaS.Orders.EntityFrameworkCore;
 public interface IOrdersDbContext : IEfCoreDbContext
 {
     DbSet<Order> Orders { get; }
+    DbSet<OrderItem> OrderItems { get; }
 }

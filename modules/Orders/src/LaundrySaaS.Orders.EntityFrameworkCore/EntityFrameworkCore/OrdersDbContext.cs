@@ -9,6 +9,7 @@ namespace LaundrySaaS.Orders.EntityFrameworkCore;
 public class OrdersDbContext : AbpDbContext<OrdersDbContext>, IOrdersDbContext
 {
     public DbSet<Order> Orders { get; set; } = null!;
+    public DbSet<OrderItem> OrderItems { get; set; } = null!;
 
     public OrdersDbContext(DbContextOptions<OrdersDbContext> options)
         : base(options)
