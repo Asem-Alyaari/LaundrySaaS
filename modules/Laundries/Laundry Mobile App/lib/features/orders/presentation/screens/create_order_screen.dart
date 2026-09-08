@@ -368,6 +368,42 @@ class _CreateOrderContent extends StatelessWidget {
     );
   }
 
+  Widget _buildPaymentTypeTab({
+    required String label,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.white : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : null,
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+            color: isSelected ? const Color(0xFF0284C7) : const Color(0xFF64748B),
+          ),
+        ),
+      ),
+    );
+  }
+
   // ──────────────────────────────────────────
   // 2. قسم كتالوج خدمات المغسلة واختيار الكميات
   // ──────────────────────────────────────────
@@ -745,37 +781,207 @@ class _CreateOrderContent extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // طرق الدفع
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _buildPaymentChip(
-                label: 'نقداً (كاش)',
-                icon: Icons.money_rounded,
-                isSelected: controller.paymentMethod == 1,
-                onTap: () => controller.setPaymentMethod(1),
-              ),
-              _buildPaymentChip(
-                label: 'شبكة (مدى / بطاقة)',
-                icon: Icons.credit_card_rounded,
-                isSelected: controller.paymentMethod == 2,
-                onTap: () => controller.setPaymentMethod(2),
-              ),
-              _buildPaymentChip(
-                label: 'تحويل بنكي',
-                icon: Icons.account_balance_rounded,
-                isSelected: controller.paymentMethod == 3,
-                onTap: () => controller.setPaymentMethod(3),
-              ),
-              _buildPaymentChip(
-                label: 'آجل / عند الاستلام',
-                icon: Icons.schedule_rounded,
-                isSelected: controller.paymentMethod == 5,
-                onTap: () => controller.setPaymentMethod(5),
-              ),
-            ],
+          // ─── اختيار نوع السداد (كامل / جزئي / آجل) ───
+          Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildPaymentTypeTab(
+                    label: 'مدفوع بالكامل',
+                    isSelected: controller.paymentType == 1,
+                    onTap: () => controller.setPaymentType(1),
+                  ),
+                ),
+                Expanded(
+                  child: _buildPaymentTypeTab(
+                    label: 'دفع جزئي',
+                    isSelected: controller.paymentType == 2,
+                    onTap: () => controller.setPaymentType(2),
+                  ),
+                ),
+                Expanded(
+                  child: _buildPaymentTypeTab(
+                    label: 'آجل / غير مدفوع',
+                    isSelected: controller.paymentType == 3,
+                    onTap: () => controller.setPaymentType(3),
+                  ),
+                ),
+              ],
+            ),
           ),
+
+          // ─── تفاصيل الدفع الجزئي إن تم اختياره ───
+          if (controller.paymentType == 2) ...[
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFFBEB),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFF59E0B)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.incomplete_circle_rounded,
+                          color: Color(0xFFD97706), size: 18),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'تفاصيل الدفع الجزئي',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF92400E),
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        'الإجمالي: ${controller.totalAmount.toStringAsFixed(2)} ر.س',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF78350F),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: controller.paidAmountController,
+                          keyboardType:
+                              const TextInputType.numberWithOptions(decimal: true),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))
+                          ],
+                          decoration: InputDecoration(
+                            labelText: 'المبلغ المدفوع حالياً (ر.س) *',
+                            hintText: '0.00',
+                            prefixIcon: const Icon(Icons.payments_outlined, size: 18),
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(color: Color(0xFFCBD5E1)),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                          ),
+                          onChanged: (_) => controller.onPaidAmountChanged(),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Container(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFEF2F2),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: const Color(0xFFFECACA)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'المتبقي للتحصيل',
+                              style: TextStyle(
+                                fontSize: 10.5,
+                                color: Color(0xFF991B1B),
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Text(
+                              '${controller.currentRemainingAmount.toStringAsFixed(2)} ر.س',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w900,
+                                color: Color(0xFFDC2626),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 14),
+
+          // طرق الدفع (تظهر فقط عند السداد الكامل أو الدفع الجزئي، وتختفي عند اختيار آجل)
+          if (controller.paymentType != 3) ...[
+            const SizedBox(height: 14),
+            const Text(
+              'طريقة الدفع للمبلغ المدفوع:',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF475569),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _buildPaymentChip(
+                  label: 'نقداً (كاش)',
+                  icon: Icons.money_rounded,
+                  isSelected: controller.paymentMethod == 1,
+                  onTap: () => controller.setPaymentMethod(1),
+                ),
+                _buildPaymentChip(
+                  label: 'شبكة (مدى / بطاقة)',
+                  icon: Icons.credit_card_rounded,
+                  isSelected: controller.paymentMethod == 2,
+                  onTap: () => controller.setPaymentMethod(2),
+                ),
+                _buildPaymentChip(
+                  label: 'تحويل بنكي',
+                  icon: Icons.account_balance_rounded,
+                  isSelected: controller.paymentMethod == 3,
+                  onTap: () => controller.setPaymentMethod(3),
+                ),
+              ],
+            ),
+          ] else ...[
+            const SizedBox(height: 14),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF1F5F9),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFCBD5E1)),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.schedule_rounded, color: Color(0xFF64748B), size: 20),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'فاتورة مستحقة بالكامل آجلاً (يتم استلام المبلغ عند تسليم الملابس للعميل)',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF475569),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
 
           const SizedBox(height: 14),
 

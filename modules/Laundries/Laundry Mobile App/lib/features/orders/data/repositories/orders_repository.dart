@@ -129,6 +129,42 @@ class OrdersRepository {
     }
   }
 
+  /// Record payment on order and optionally deliver
+  Future<OrderModel> recordPayment({
+    required String tenant,
+    required String accessToken,
+    required String orderId,
+    required double amount,
+    required int paymentMethod,
+    bool markAsDelivered = false,
+  }) async {
+    final url = Uri.parse('${ApiClient.apiHostUrl}${ApiEndpoints.orders}/$orderId/pay')
+        .replace(queryParameters: {'__tenant': tenant.trim()});
+
+    final dto = RecordOrderPaymentDto(
+      amount: amount,
+      paymentMethod: paymentMethod,
+      markAsDelivered: markAsDelivered,
+    );
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: json.encode(dto.toJson()),
+    ).timeout(const Duration(seconds: 15));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      return OrderModel.fromJson(data);
+    } else {
+      throw Exception(_extractErrorMessage(response.body, 'فشل في تسجيل الدفعة والتسليم'));
+    }
+  }
+
   String _extractErrorMessage(String body, String fallback) {
     try {
       final errData = json.decode(utf8.decode(utf8.encode(body)));

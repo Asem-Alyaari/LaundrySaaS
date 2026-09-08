@@ -6,6 +6,7 @@ import '../../../catalog/presentation/screens/catalog_screen.dart';
 import '../../../drivers/presentation/screens/drivers_screen.dart';
 import '../../../orders/presentation/screens/create_order_screen.dart';
 import '../../../orders/presentation/screens/orders_list_screen.dart';
+import '../../../reports/presentation/screens/reports_screen.dart';
 import '../../../laundry_setup/data/models/laundry_dto.dart';
 import '../../../laundry_setup/data/repositories/laundry_repository.dart';
 
@@ -182,6 +183,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
       if (mounted) {
         _loadLaundryProfile();
       }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('تعذر العثور على معرّف المغسلة، تأكد من استكمال البيانات'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Color(0xFFEF4444),
+        ),
+      );
+    }
+  }
+
+  Future<void> _openReports() async {
+    final auth = context.read<AuthController>();
+    String? laundryId = auth.laundryId ?? _laundry?.id;
+
+    if (laundryId == null || laundryId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('جاري جلب بيانات المغسلة... يرجى الانتظار'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      await _loadLaundryProfile();
+      laundryId = auth.laundryId ?? _laundry?.id;
+    }
+
+    if (!mounted) return;
+
+    if (laundryId != null && laundryId.isNotEmpty) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => ReportsScreen(
+            tenant: auth.tenantName ?? '',
+            accessToken: auth.accessToken ?? '',
+            laundryId: laundryId!,
+            laundryName: _laundry?.name ?? 'مغسلتي',
+          ),
+        ),
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -934,14 +974,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               subtitle: 'الدخل وحركة الصندوق',
               icon: Icons.analytics_outlined,
               color: const Color(0xFF10B981),
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('التقارير المالية والتشغيلية قيد التطوير'),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              },
+              onTap: _openReports,
             ),
             _buildOperationTile(
               title: 'الطابعة والباركود',

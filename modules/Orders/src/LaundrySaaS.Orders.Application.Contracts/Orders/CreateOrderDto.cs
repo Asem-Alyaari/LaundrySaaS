@@ -30,6 +30,8 @@ public class CreateOrderDto
 
     public decimal TaxAmount { get; set; } = 0;
 
+    public decimal PaidAmount { get; set; } = 0;
+
     [MaxLength(512)]
     public string? Notes { get; set; }
 

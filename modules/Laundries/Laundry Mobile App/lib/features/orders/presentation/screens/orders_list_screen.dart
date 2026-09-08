@@ -247,6 +247,24 @@ class _OrdersListContent extends StatelessWidget {
                           );
                         }
                       },
+                      onCollectAndDeliver: (orderId, amount, paymentMethod) async {
+                        final ok = await controller.recordPayment(
+                          orderId: orderId,
+                          amount: amount,
+                          paymentMethod: paymentMethod,
+                          markAsDelivered: true,
+                        );
+                        if (ok && context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('تم استلام المتبقي وتسليم الفاتورة بنجاح'),
+                              backgroundColor: Color(0xFF16A34A),
+                              behavior: SnackBarBehavior.floating,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
                     );
                   },
                 ),

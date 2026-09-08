@@ -73,6 +73,14 @@ public static class OrdersDbContextModelCreatingExtensions
                 .IsRequired()
                 .HasPrecision(18, 2);
 
+            b.Property(o => o.PaidAmount)
+                .IsRequired()
+                .HasPrecision(18, 2);
+
+            b.Property(o => o.RemainingAmount)
+                .IsRequired()
+                .HasPrecision(18, 2);
+
             b.Property(o => o.Notes)
                 .IsRequired(false)
                 .HasMaxLength(512);

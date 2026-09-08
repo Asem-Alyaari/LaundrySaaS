@@ -95,6 +95,40 @@ class OrdersListController extends ChangeNotifier {
     }
   }
 
+  Future<bool> recordPayment({
+    required String orderId,
+    required double amount,
+    required int paymentMethod,
+    bool markAsDelivered = false,
+  }) async {
+    _isUpdatingStatus = true;
+    notifyListeners();
+
+    try {
+      final updated = await _ordersRepository.recordPayment(
+        tenant: tenant,
+        accessToken: accessToken,
+        orderId: orderId,
+        amount: amount,
+        paymentMethod: paymentMethod,
+        markAsDelivered: markAsDelivered,
+      );
+
+      final index = _orders.indexWhere((o) => o.id == orderId);
+      if (index != -1) {
+        _orders[index] = updated;
+      }
+      _isUpdatingStatus = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      _isUpdatingStatus = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   int get totalCount => _orders.length;
   int get pendingCount => _orders.where((o) => o.status == 1).length;
   int get processingCount => _orders.where((o) => o.status == 4).length;

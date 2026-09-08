@@ -22,6 +22,8 @@ public class OrderDto : FullAuditedEntityDto<Guid>
     public decimal DiscountAmount { get; set; }
     public decimal TaxAmount { get; set; }
     public decimal TotalAmount { get; set; }
+    public decimal PaidAmount { get; set; }
+    public decimal RemainingAmount { get; set; }
     public string? Notes { get; set; }
 
     public List<OrderItemDto> Items { get; set; } = new();

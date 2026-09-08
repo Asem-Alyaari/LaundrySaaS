@@ -64,12 +64,16 @@ class CreateOrderController extends ChangeNotifier {
   final TextEditingController customerPhoneController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
   final TextEditingController discountController = TextEditingController(text: '0');
+  final TextEditingController paidAmountController = TextEditingController();
 
   // Payment configuration
   int _paymentMethod = 1; // 1: Cash, 2: Card (Mada), 3: Transfer, 5: Later
   int get paymentMethod => _paymentMethod;
 
-  int _paymentStatus = 2; // 2: Paid (default for POS), 1: Unpaid
+  int _paymentType = 1; // 1: Fully Paid, 2: Partial Payment, 3: Later / Unpaid
+  int get paymentType => _paymentType;
+
+  int _paymentStatus = 2; // 2: Paid, 3: PartiallyPaid, 1: Unpaid
   int get paymentStatus => _paymentStatus;
 
   Future<void> _init() async {
@@ -240,11 +244,46 @@ class CreateOrderController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setPaymentType(int type) {
+    _paymentType = type;
+    if (type == 1) {
+      _paymentStatus = 2; // Paid
+      if (_paymentMethod == 5) _paymentMethod = 1; // Default to Cash if was Later
+      paidAmountController.text = totalAmount.toStringAsFixed(2);
+    } else if (type == 2) {
+      _paymentStatus = 3; // PartiallyPaid
+      if (_paymentMethod == 5) _paymentMethod = 1; // Default to Cash if was Later
+      if (paidAmountController.text.isEmpty || paidAmountController.text == '0') {
+        paidAmountController.text = (totalAmount / 2).toStringAsFixed(2);
+      }
+    } else {
+      _paymentStatus = 1; // Unpaid / Later
+      _paymentMethod = 5; // Later (آجل)
+      paidAmountController.text = '0';
+    }
+    notifyListeners();
+  }
+
+  void onPaidAmountChanged() {
+    notifyListeners();
+  }
+
+  double get currentPaidAmount {
+    if (_paymentType == 1) return totalAmount;
+    if (_paymentType == 3) return 0.0;
+    final val = double.tryParse(paidAmountController.text.trim()) ?? 0.0;
+    return val.clamp(0.0, totalAmount);
+  }
+
+  double get currentRemainingAmount {
+    return max(0.0, totalAmount - currentPaidAmount);
+  }
+
   void setPaymentMethod(int method) {
     _paymentMethod = method;
     if (method == 5) {
-      // If "آجل", set status to unpaid
-      _paymentStatus = 1;
+      // If "آجل", switch type to Later
+      setPaymentType(3);
     }
     notifyListeners();
   }
@@ -286,6 +325,14 @@ class CreateOrderController extends ChangeNotifier {
       return null;
     }
 
+    final effectivePaid = currentPaidAmount;
+    final effectiveStatus = _paymentType == 1
+        ? 2 // Paid
+        : (_paymentType == 2
+            ? (effectivePaid >= totalAmount && totalAmount > 0 ? 2 : (effectivePaid > 0 ? 3 : 1))
+            : 1); // Unpaid
+    final effectiveMethod = _paymentType == 3 ? 5 : _paymentMethod;
+
     _isSubmitting = true;
     notifyListeners();
 
@@ -299,10 +346,11 @@ class CreateOrderController extends ChangeNotifier {
             ? customerPhoneController.text.trim()
             : null,
         deliveryType: 1, // InStore
-        paymentStatus: _paymentStatus,
-        paymentMethod: _paymentMethod,
+        paymentStatus: effectiveStatus,
+        paymentMethod: effectiveMethod,
         discountAmount: discountAmount,
         taxAmount: 0,
+        paidAmount: effectivePaid,
         notes: notesController.text.trim().isNotEmpty
             ? notesController.text.trim()
             : null,
@@ -332,15 +380,20 @@ class CreateOrderController extends ChangeNotifier {
     customerPhoneController.clear();
     notesController.clear();
     discountController.text = '0';
+    paidAmountController.clear();
     _selectedCustomer = null;
     _isWalkIn = true;
     _paymentMethod = 1;
+    _paymentType = 1;
     _paymentStatus = 2;
     _errorMessage = null;
     notifyListeners();
   }
 
   void updateDiscount() {
+    if (_paymentType == 1) {
+      paidAmountController.text = totalAmount.toStringAsFixed(2);
+    }
     notifyListeners();
   }
 
@@ -350,6 +403,7 @@ class CreateOrderController extends ChangeNotifier {
     customerPhoneController.dispose();
     notesController.dispose();
     discountController.dispose();
+    paidAmountController.dispose();
     super.dispose();
   }
 }

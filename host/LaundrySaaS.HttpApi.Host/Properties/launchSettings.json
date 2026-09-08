@@ -18,7 +18,7 @@
     "LaundrySaaS.DemoApp": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:44328;http://localhost:44329",
+      "applicationUrl": "https://0.0.0.0:44328;http://0.0.0.0:44329",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

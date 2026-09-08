@@ -3,7 +3,10 @@ using System.Threading.Tasks;
 using LaundrySaaS.Accounting.Accounts;
 using LaundrySaaS.Accounting.FiscalYears;
 using Volo.Abp;
+using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.MultiTenancy;
 
 namespace LaundrySaaS.Accounting.JournalEntries;
 
@@ -12,15 +15,18 @@ public class JournalEntryManager : DomainService
     private readonly IJournalEntryRepository _journalEntryRepository;
     private readonly IAccountRepository _accountRepository;
     private readonly IFiscalYearRepository _fiscalYearRepository;
+    private readonly IDataFilter _dataFilter;
 
     public JournalEntryManager(
         IJournalEntryRepository journalEntryRepository,
         IAccountRepository accountRepository,
-        IFiscalYearRepository fiscalYearRepository)
+        IFiscalYearRepository fiscalYearRepository,
+        IDataFilter dataFilter)
     {
         _journalEntryRepository = journalEntryRepository;
         _accountRepository = accountRepository;
         _fiscalYearRepository = fiscalYearRepository;
+        _dataFilter = dataFilter;
     }
 
     public async Task<string> GenerateEntryNumberAsync(DateTime entryDate)
@@ -45,7 +51,17 @@ public class JournalEntryManager : DomainService
 
     public async Task ValidateLineAccountAsync(Guid accountId)
     {
-        var account = await _accountRepository.GetAsync(accountId);
+        Account? account = null;
+        using (_dataFilter.Disable<IMultiTenant>())
+        {
+            account = await _accountRepository.FindAsync(accountId);
+        }
+
+        if (account == null)
+        {
+            throw new EntityNotFoundException(typeof(Account), accountId);
+        }
+
         if (!account.AllowDirectPosting)
         {
             throw new BusinessException(AccountingErrorCodes.CannotPostToParentAccount)

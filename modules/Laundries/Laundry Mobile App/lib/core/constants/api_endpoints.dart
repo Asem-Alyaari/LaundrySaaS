@@ -13,6 +13,7 @@ class ApiEndpoints {
 
   // Orders
   static const String orders = '/api/orders/orders';
+  static const String orderReport = '/api/orders/orders/report';
 
   // Laundries & Services Catalog
   static const String laundries = '/api/laundries/laundries';

@@ -6,22 +6,17 @@ import 'package:dio/dio.dart';
 import 'api_client_adapter_stub.dart'
     if (dart.library.io) 'api_client_adapter_native.dart' as adapter;
 
-class ApiClient {
-  /// Web ➜ http://localhost:44385 (avoids browser self-signed SSL block)
-  /// Native ➜ https://localhost:44384
-  static String get authServerUrl {
-    if (kIsWeb) {
-      return 'http://localhost:44385';
-    }
-    return 'https://localhost:44384';
-  }
+import 'dart:io' show Platform;
 
-  static String get apiHostUrl {
-    if (kIsWeb) {
-      return 'http://localhost:44329';
-    }
-    return 'https://localhost:44328';
-  }
+class ApiClient {
+  /// Base host: localhost on Web, 127.0.0.1 on Native (matching adb reverse forwarding)
+  static String get _host => kIsWeb ? 'localhost' : '127.0.0.1';
+
+  /// AuthServer URL
+  static String get authServerUrl => 'http://$_host:44385';
+
+  /// API Host URL
+  static String get apiHostUrl => 'http://$_host:44329';
 
   final Dio _dio;
 

@@ -85,6 +85,7 @@ class CreateOrderDto {
   final int paymentMethod;
   final double discountAmount;
   final double taxAmount;
+  final double paidAmount;
   final String? notes;
   final List<CreateOrderItemDto> items;
 
@@ -99,6 +100,7 @@ class CreateOrderDto {
     this.paymentMethod = 1,
     this.discountAmount = 0.0,
     this.taxAmount = 0.0,
+    this.paidAmount = 0.0,
     this.notes,
     required this.items,
   });
@@ -115,8 +117,29 @@ class CreateOrderDto {
       'paymentMethod': paymentMethod,
       'discountAmount': discountAmount,
       'taxAmount': taxAmount,
+      'paidAmount': paidAmount,
       'notes': notes,
       'items': items.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+
+class RecordOrderPaymentDto {
+  final double amount;
+  final int paymentMethod;
+  final bool markAsDelivered;
+
+  RecordOrderPaymentDto({
+    required this.amount,
+    required this.paymentMethod,
+    this.markAsDelivered = false,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'amount': amount,
+      'paymentMethod': paymentMethod,
+      'markAsDelivered': markAsDelivered,
     };
   }
 }
@@ -139,6 +162,8 @@ class OrderModel {
   final double discountAmount;
   final double taxAmount;
   final double totalAmount;
+  final double paidAmount;
+  final double remainingAmount;
   final String? notes;
   final DateTime creationTime;
   final List<OrderItemModel> items;
@@ -161,6 +186,8 @@ class OrderModel {
     required this.discountAmount,
     required this.taxAmount,
     required this.totalAmount,
+    required this.paidAmount,
+    required this.remainingAmount,
     this.notes,
     required this.creationTime,
     required this.items,
@@ -168,6 +195,12 @@ class OrderModel {
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     final rawItems = json['items'] as List<dynamic>? ?? [];
+    final total = (json['totalAmount'] as num?)?.toDouble() ?? 0.0;
+    final paid = (json['paidAmount'] as num?)?.toDouble() ??
+        ((json['paymentStatus'] as num?)?.toInt() == 2 ? total : 0.0);
+    final remaining = (json['remainingAmount'] as num?)?.toDouble() ??
+        (total - paid).clamp(0.0, double.infinity);
+
     return OrderModel(
       id: json['id'] as String? ?? '',
       tenantId: json['tenantId'] as String?,
@@ -185,7 +218,9 @@ class OrderModel {
       subtotal: (json['subtotal'] as num?)?.toDouble() ?? 0.0,
       discountAmount: (json['discountAmount'] as num?)?.toDouble() ?? 0.0,
       taxAmount: (json['taxAmount'] as num?)?.toDouble() ?? 0.0,
-      totalAmount: (json['totalAmount'] as num?)?.toDouble() ?? 0.0,
+      totalAmount: total,
+      paidAmount: paid,
+      remainingAmount: remaining,
       notes: json['notes'] as String?,
       creationTime: json['creationTime'] != null
           ? DateTime.tryParse(json['creationTime'] as String) ?? DateTime.now()

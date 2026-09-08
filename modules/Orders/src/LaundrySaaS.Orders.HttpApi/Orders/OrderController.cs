@@ -41,4 +41,16 @@ public class OrderController : OrdersController, IOrderAppService
     {
         return _orderAppService.UpdateStatusAsync(id, status);
     }
+
+    [HttpPost("{id}/pay")]
+    public Task<OrderDto> RecordPaymentAsync(Guid id, [FromBody] RecordOrderPaymentDto input)
+    {
+        return _orderAppService.RecordPaymentAsync(id, input);
+    }
+
+    [HttpGet("report")]
+    public Task<LaundryReportDto> GetReportAsync([FromQuery] GetLaundryReportInputDto input)
+    {
+        return _orderAppService.GetReportAsync(input);
+    }
 }
