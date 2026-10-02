@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.Application;
+using Volo.Abp.Identity;
 
 namespace LaundrySaaS.Customers;
 
@@ -9,6 +10,7 @@ namespace LaundrySaaS.Customers;
     typeof(CustomersDomainModule),
     typeof(CustomersApplicationContractsModule),
     typeof(AbpDddApplicationModule),
+    typeof(AbpIdentityDomainModule),
     typeof(AbpMapperlyModule)
     )]
 public class CustomersApplicationModule : AbpModule

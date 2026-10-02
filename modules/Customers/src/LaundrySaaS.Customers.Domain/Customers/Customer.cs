@@ -8,20 +8,23 @@ public class Customer : FullAuditedAggregateRoot<Guid>
 {
     public string FullName { get; private set; }
     public string PhoneNumber { get; private set; }
+    public string Email { get; private set; }
     public Address Address { get; private set; }
 
     private Customer()
     {
         FullName = string.Empty;
         PhoneNumber = string.Empty;
+        Email = string.Empty;
         Address = null!;
     }
 
-    public Customer(Guid id, string fullName, string phoneNumber, Address address)
+    public Customer(Guid id, string fullName, string phoneNumber, string email, Address address)
         : base(id)
     {
         FullName = fullName;
         PhoneNumber = phoneNumber;
+        Email = email ?? string.Empty;
         Address = address;
     }
 

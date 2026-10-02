@@ -15,6 +15,7 @@ public class CustomersEntityFrameworkCoreModule : AbpModule
     {
         context.Services.AddAbpDbContext<CustomersDbContext>(options =>
         {
+            options.AddDefaultRepositories(includeAllEntities: true);
             options.AddRepository<Customer, EfCoreCustomerRepository>();
         });
     }

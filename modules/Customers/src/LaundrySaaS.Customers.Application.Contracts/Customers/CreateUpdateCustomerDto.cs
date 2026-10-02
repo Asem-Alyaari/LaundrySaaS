@@ -11,6 +11,8 @@ public class CreateUpdateCustomerDto
     [Required]
     [MaxLength(32)]
     public string PhoneNumber { get; set; } = string.Empty;
+    [MaxLength(128)]
+    public string Email { get; set; } = string.Empty;
 
     [Required]
     public CreateUpdateAddressDto Address { get; set; } = default!;

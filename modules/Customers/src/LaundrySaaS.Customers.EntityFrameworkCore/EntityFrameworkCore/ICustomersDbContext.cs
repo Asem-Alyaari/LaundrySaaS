@@ -9,4 +9,5 @@ namespace LaundrySaaS.Customers.EntityFrameworkCore;
 public interface ICustomersDbContext : IEfCoreDbContext
 {
     DbSet<Customer> Customers { get; }
+    DbSet<CustomerAddress> CustomerAddresses { get; }
 }

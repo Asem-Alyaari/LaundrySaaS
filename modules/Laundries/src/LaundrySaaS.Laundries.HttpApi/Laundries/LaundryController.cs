@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
@@ -31,6 +32,15 @@ public class LaundryController : LaundriesController, ILaundryAppService
         return _laundryAppService.GetAsync(id);
     }
 
+    [HttpGet("nearby")]
+    public virtual Task<List<LaundryDto>> GetNearbyAsync(
+        [FromQuery] double lat,
+        [FromQuery] double lng,
+        [FromQuery] double radiusKm = 10)
+    {
+        return _laundryAppService.GetNearbyAsync(lat, lng, radiusKm);
+    }
+
     [HttpPost]
     public virtual Task<LaundryDto> CreateAsync([FromBody] CreateUpdateLaundryDto input)
     {
@@ -49,3 +59,4 @@ public class LaundryController : LaundriesController, ILaundryAppService
         return _laundryAppService.DeleteAsync(id);
     }
 }
+

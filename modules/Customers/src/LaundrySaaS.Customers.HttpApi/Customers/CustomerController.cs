@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 
@@ -53,5 +54,47 @@ public class CustomerController : CustomersController, ICustomerAppService
     public virtual Task DeleteAsync(Guid id)
     {
         return _customerAppService.DeleteAsync(id);
+    }
+
+    [HttpPost("register")]
+    [AllowAnonymous]
+    public virtual Task<RegisterCustomerResultDto> RegisterAsync([FromBody] RegisterCustomerDto input)
+    {
+        return _customerAppService.RegisterAsync(input);
+    }
+
+    [HttpGet("{customerId}/addresses")]
+    [AllowAnonymous]
+    public virtual Task<List<CustomerAddressDto>> GetAddressesAsync(Guid customerId)
+    {
+        return _customerAppService.GetAddressesAsync(customerId);
+    }
+
+    [HttpPost("{customerId}/addresses")]
+    [AllowAnonymous]
+    public virtual Task<CustomerAddressDto> AddAddressAsync(Guid customerId, [FromBody] CreateUpdateCustomerAddressDto input)
+    {
+        return _customerAppService.AddAddressAsync(customerId, input);
+    }
+
+    [HttpPut("addresses/{addressId}")]
+    [AllowAnonymous]
+    public virtual Task<CustomerAddressDto> UpdateAddressAsync(Guid addressId, [FromBody] CreateUpdateCustomerAddressDto input)
+    {
+        return _customerAppService.UpdateAddressAsync(addressId, input);
+    }
+
+    [HttpDelete("addresses/{addressId}")]
+    [AllowAnonymous]
+    public virtual Task DeleteAddressAsync(Guid addressId)
+    {
+        return _customerAppService.DeleteAddressAsync(addressId);
+    }
+
+    [HttpPost("addresses/{addressId}/set-default")]
+    [AllowAnonymous]
+    public virtual Task SetDefaultAddressAsync(Guid addressId)
+    {
+        return _customerAppService.SetDefaultAddressAsync(addressId);
     }
 }

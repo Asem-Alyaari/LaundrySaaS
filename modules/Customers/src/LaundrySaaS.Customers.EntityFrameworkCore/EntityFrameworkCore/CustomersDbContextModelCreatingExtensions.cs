@@ -35,5 +35,17 @@ public static class CustomersDbContextModelCreatingExtensions
                 addr.Property(a => a.BuildingNumber).IsRequired().HasMaxLength(16).HasColumnName("Address_BuildingNumber");
             });
         });
+
+        builder.Entity<CustomerAddress>(b =>
+        {
+            b.ToTable(CustomersDbProperties.DbTablePrefix + "CustomerAddresses", CustomersDbProperties.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(a => a.Title).IsRequired().HasMaxLength(128);
+            b.Property(a => a.AddressType).IsRequired().HasMaxLength(32);
+            b.Property(a => a.Description).HasMaxLength(256);
+            b.Property(a => a.BuildingOrFloor).HasMaxLength(128);
+            b.Property(a => a.DeliveryNotes).HasMaxLength(256);
+            b.HasIndex(a => a.CustomerId);
+        });
     }
 }
